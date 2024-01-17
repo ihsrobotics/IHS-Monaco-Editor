@@ -13,25 +13,19 @@ app.use(cors());
 
 
 // directory path of all editor files
-// const DIRECTORY_PATH = '/home/snow/Documents/VOICES_IN_MY_HEAD/server/test';
-
+const DIRECTORY_PATH = path.join(process.env.HOME, 'Documents', 'IME_files')
 
 
 process.env.PYTHONUNBUFFERED = '1';
 
-let DIRECTORY_PATH = '';
 let PY_BOILERPLATE = '';
-let CPP_BOILERPLATE = '';
+let CPP_BOILERPLATE = ''; 
 
-async function loadDirectoryPath(){
-    DIRECTORY_PATH = JSON.parse(await fs.readFile('./server-config.json', 'utf-8')).directoryPath;
-}
 async function loadBp(){
     const boilerplate = JSON.parse(await fs.readFile('./server-config.json', 'utf-8'));
     PY_BOILERPLATE = boilerplate.pythonBoilerplate;
     CPP_BOILERPLATE = boilerplate.cppBoilerplate;
 }
-loadDirectoryPath();
 loadBp();
 
 

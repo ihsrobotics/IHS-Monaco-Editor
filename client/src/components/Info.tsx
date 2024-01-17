@@ -5,7 +5,7 @@ function Info(){
     return(
         <>
             <Typography variant="h6" component="h2" align="center" mb={3}>
-                    IHS Monaco Editor (IME) <br/> v0.10.0
+                    IHS Monaco Editor (IME) <br/> v1.0.0
             </Typography>
 
             <Typography align="center">
