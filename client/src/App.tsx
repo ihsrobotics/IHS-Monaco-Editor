@@ -40,6 +40,7 @@ function App() {
   const zeroSidebarWidth = 75, minSidebarWidth = 200;
 
   const [fileUpdateFlag, setFileUpdateFlag] = useState(false);
+  const [isFilesLoaded, setIsFilesLoaded] = useState(false);
 
   const [projects, setProjects] = useState<object>({});
 
@@ -78,10 +79,13 @@ function App() {
     // clear the current projects
     console.log("new fetch");
     setProjects({});
+    setIsFilesLoaded(false);
     fetch('http://'+address+':5000/api/getFileHierarchy', {method: 'GET'}).then(
       response => response.json()
     ).then(
       data => { setProjects(data) }
+    ).then(
+      () => {setIsFilesLoaded(true)}
     );
   }, [fileUpdateFlag]);
 
@@ -160,7 +164,7 @@ function App() {
           <div className="appContainer">
             <SideBar width={sidebarWidth} widthUpdateFunction={setSidebarWidth} zeroSidebarWidth={zeroSidebarWidth} minSidebarWidth={minSidebarWidth}>
               {
-              Object.keys(projects).length === 0 ? <p>Loading...</p> : 
+              !isFilesLoaded ? <p>Loading...</p> : 
                   <FileListing files={projects}/>
               }
             </SideBar>
