@@ -71,7 +71,7 @@ Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
 The address of the editor on the Wombat should be `10.42.0.1:3000`, but if that doesn't work you can check the ip using `ifconfig` in the terminal.
 
 ## Roadmap
-
+- File management
 - [Monaco code editor](https://microsoft.github.io/monaco-editor/)
 - Compile and run button
 - Linux terminal
