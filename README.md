@@ -66,7 +66,7 @@ Then at the first available line, type toe following:
 ```
 Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
 
-The address of the editor on the Wombat should be `10.42.0.1:3000`, but if that doesn't work you can check the ip using `ifconfig` in the terminal.
+**The address of the editor on the Wombat on AP mode should be `10.42.0.1:3000`, but if that doesn't work you can check the ip using `ifconfig` in the terminal.**
 
 ## Roadmap
 - File management
