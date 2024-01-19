@@ -33,6 +33,8 @@ cd client && npm install
 npm run build
 cd ..
 ```
+Note: if you are building on the wombat, it could take over 30 minutes as of v1.0.1. It is recommended to clone the repository on your computer and perform the build there. Then just copy the `dist` folder over to the client directory on the wombat. 
+
 Finally, serve the frontend and backend.
 
 Backend
@@ -51,8 +53,23 @@ serve -s dist -l 3000
 The app should be up on
 http://raspberry-pi-ip:3000.
 
+### Start IME Process on Startup
+
+To start IME on startup on linux, edit the crontab file.
+To open the crontab file:
+`
+sudo crontab -e
+`
+
+Then at the first available line, type toe following:
+```
+@reboot pm2 start <your path>/IHS-Monaco-Editor/server/index.js
+@reboot serve -s <your path>/IHS-Monaco-Editor/client/dist -l 3000
+```
+Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
+
 ## Roadmap
-- File Management
+
 - [Monaco code editor](https://microsoft.github.io/monaco-editor/)
 - Compile and run button
 - Linux terminal
