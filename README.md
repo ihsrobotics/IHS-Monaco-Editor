@@ -69,7 +69,7 @@ Then at the first available line, type toe following:
 Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
 
 ## Roadmap
-
+- File management
 - [Monaco code editor](https://microsoft.github.io/monaco-editor/)
 - Compile and run button
 - Linux terminal
