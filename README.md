@@ -50,8 +50,6 @@ sudo npm install -g serve
 cd client
 serve -s dist -l 3000
 ```
-The app should be up on
-http://raspberry-pi-ip:3000.
 
 ### Start IME Process on Startup
 
