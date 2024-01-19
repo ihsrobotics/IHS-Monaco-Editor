@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import './Terminal.css'
 import path from 'path-browserify'
 import { keyInt, liveShell } from "../shell";
+import { address } from "../App";
 
 interface Props{
     isFinished: boolean,
@@ -134,7 +135,7 @@ function Terminal({isFinished, setIsFinished, PID, setPID}: Props){
         document.addEventListener('keydown', handleWindowKeyDown);
         document.getElementById('terminalInput')?.addEventListener('keydown', handleKeyDown);
         if(!isTerminalLoaded)
-            fetch('http://localhost:5000/api/getPath', {method: 'GET'}).then(
+            fetch('http://'+address+':5000/api/getPath', {method: 'GET'}).then(
                 response => response.json()
             ).then(
                 data => {

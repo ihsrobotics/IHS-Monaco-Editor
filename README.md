@@ -33,7 +33,7 @@ cd client && npm install
 npm run build
 cd ..
 ```
-Note: if you are building on the wombat, it could take over 30 minutes as of v1.0.1. It is recommended to clone the repository on your computer and perform the build there. Then just copy the `dist` folder over to the client directory on the wombat. 
+Note: if you are building on the wombat, it could take over 30 minutes as of v1.1.0. It is recommended to clone the repository on your computer and perform the build there. Then just copy the `dist` folder over to the client directory on the wombat. 
 
 Finally, serve the frontend and backend.
 
@@ -67,6 +67,8 @@ Then at the first available line, type toe following:
 @reboot serve -s <your path>/IHS-Monaco-Editor/client/dist -l 3000
 ```
 Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
+
+The address of the editor on the Wombat should be `10.42.0.1:3000`, but if that doesn't work you can check the ip using `ifconfig` in the terminal.
 
 ## Roadmap
 

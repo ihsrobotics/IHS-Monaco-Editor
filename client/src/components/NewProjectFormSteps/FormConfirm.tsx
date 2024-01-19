@@ -1,7 +1,7 @@
 import { Box, Button, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { projectProps } from "../NewProjectForm";
 import { newFile, newFolder, saveFile } from "../../shell";
-import { FileUpdateContext, ToastContext, ToastProps } from "../../App";
+import { FileUpdateContext, ToastContext, ToastProps, address } from "../../App";
 import { useContext } from "react";
 
 
@@ -22,7 +22,7 @@ async function makeNewProject({ projectName, presets, boilerplate, include, link
     });
 
     // create the main file
-    const response = await fetch('http://localhost:5000/api/writeBp', 
+    const response = await fetch('http://'+address+':5000/api/writeBp', 
         {method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({filePath: projectName, boilerplate: boilerplate})

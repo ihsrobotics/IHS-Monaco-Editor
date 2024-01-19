@@ -1,5 +1,5 @@
 import React from 'react'
-import { ToastProps } from './App';
+import { ToastProps, address } from './App';
 import path from 'path-browserify'
 
 export function rename(oldName: string, fileUpdateFlag: boolean, fileUpdateFunction: React.Dispatch<boolean>, setToastProps: React.Dispatch<ToastProps>){
@@ -7,7 +7,7 @@ export function rename(oldName: string, fileUpdateFlag: boolean, fileUpdateFunct
     if(newName == null){ return; }
     newName = newName.replace(/[^a-zA-Z0-9_\-]/g, '');
     newName = oldName.slice(0, oldName.lastIndexOf('/'))+'/'+newName;
-    fetch('http://localhost:5000/api/shell', 
+    fetch('http://'+address+':5000/api/shell', 
         {method: 'POST', 
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({command: 'mv '+oldName+' '+newName})}).then(
@@ -29,7 +29,7 @@ export function deleteItem(name: string, fileUpdateFlag: boolean, fileUpdateFunc
     if(!confirm("delete "+name+"?")){
         return;
     }
-    fetch('http://localhost:5000/api/shell', 
+    fetch('http://'+address+':5000/api/shell', 
         {method: 'POST', 
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({command: 'rm -rf '+name})}).then(
@@ -51,7 +51,7 @@ export async function newFile(name: string, fileUpdateFlag: boolean, fileUpdateF
     let fileName = newFileName ? newFileName : prompt("new file name: ");
     if(fileName == null){ return; }
     fileName = fileName.replace(/[^a-zA-Z0-9_\-\.]/g, '');
-    await fetch('http://localhost:5000/api/shell', 
+    await fetch('http://'+address+':5000/api/shell', 
         {method: 'POST', 
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({command: 'touch '+name+'/'+fileName})}).then(
@@ -75,7 +75,7 @@ export async function newFolder(parentDirName: string, fileUpdateFlag?: boolean,
 
     if(folderName == null){ return; }
     folderName = folderName.replace(/[^a-zA-Z0-9_\-\.]/g, '');
-    await fetch('http://localhost:5000/api/shell', 
+    await fetch('http://'+address+':5000/api/shell', 
         {method: 'POST', 
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({command: 'mkdir '+parentDirName+(parentDirName==='' ? '' : '/')+folderName})}).then(
@@ -95,14 +95,14 @@ export async function newFolder(parentDirName: string, fileUpdateFlag?: boolean,
 }
 
 export async function getFile(path: string){
-    const response = await fetch('http://localhost:5000/api/getFile?filename='+path, {method: 'GET'});
+    const response = await fetch('http://'+address+':5000/api/getFile?filename='+path, {method: 'GET'});
     const data = await response.json();
     return data;
 }
 
 export async function saveFile(fileName: string, fileContent: string, setToastProps?: React.Dispatch<ToastProps>){
     console.log(fileName);
-    await fetch('http://localhost:5000/api/saveFile', 
+    await fetch('http://'+address+':5000/api/saveFile', 
         {method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({fileName: fileName, content: fileContent})
@@ -125,7 +125,7 @@ export async function saveFile(fileName: string, fileContent: string, setToastPr
 
 export async function command(command: string, setToastProps?: React.Dispatch<ToastProps>, successMessage?: string){   
     try{
-        const response = await fetch('http://localhost:5000/api/shell', 
+        const response = await fetch('http://'+address+':5000/api/shell', 
             {
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
@@ -185,7 +185,7 @@ const isValidJSON = (str: string) => {
 };
 
 export async function liveShell(command: string, cwd: string, setPID: React.Dispatch<number>, setIsFinished: React.Dispatch<boolean>, oldTerminalOutput: [string, string, string][], newTerminalOutput: [string, string, string], setOutput: React.Dispatch<[string, string, string][]>, setCurrentDir: React.Dispatch<string>){
-    const response = await fetch('http://localhost:5000/api/liveShell',
+    const response = await fetch('http://'+address+':5000/api/liveShell',
         {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'}, 
@@ -234,7 +234,7 @@ export async function liveShell(command: string, cwd: string, setPID: React.Disp
 
 export function keyInt(pid: number | undefined){
     if(pid == undefined) return;
-    fetch('http://localhost:5000/api/kill', {
+    fetch('http://'+address+':5000/api/kill', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({pid: pid})

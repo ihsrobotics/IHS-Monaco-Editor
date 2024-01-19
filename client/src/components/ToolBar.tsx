@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import InfoIcon from '@mui/icons-material/Info';
 import { ReactNode, useContext, useEffect, useState } from "react";
 import NewProjectForm from "./NewProjectForm";
-import { FileTabContext, FileTabValueContext, ReloadToolBarContext, ToastContext } from "../App";
+import { FileTabContext, FileTabValueContext, ReloadToolBarContext, ToastContext, address } from "../App";
 import { compileProject, keyInt, runProject, saveFile } from "../shell";
 import ProjectConfigForm from "./ProjectConfigForm";
 import Info from "./Info";
@@ -40,7 +40,7 @@ function ToolBar({ setModalOpen, setModalChildren, isFinished, PID }: Props){
     }, [reloadToolBarFlag]);
 
     useEffect(() => {
-      fetch('http://localhost:5000/api/getPath', {method: 'GET'}).then(
+      fetch('http://'+address+'/api/getPath', {method: 'GET'}).then(
         response => response.json()
       ).then(
         data => { setBaseDir(data['path']) }

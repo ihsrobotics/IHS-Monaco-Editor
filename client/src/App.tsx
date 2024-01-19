@@ -13,6 +13,7 @@ import EditorTabs, { tab } from "./components/EditorTabs";
 import BottomBar from "./components/BottomBar";
 import Terminal from "./components/Terminal";
 
+export const address = window.location.href.split(":")[1].replace('//', '')
 
 // export const FileUpdateContext = React.createContext<[boolean, React.Dispatch<React.SetStateAction<boolean>>]>([true, () => null]);
 export const FileUpdateContext = React.createContext<{fileUpdateFlag: boolean, setFileUpdateFlag: React.Dispatch<React.SetStateAction<boolean>>}>({fileUpdateFlag: true, setFileUpdateFlag: () => null});
@@ -77,7 +78,7 @@ function App() {
     // clear the current projects
     console.log("new fetch");
     setProjects({});
-    fetch('http://localhost:5000/api/getFileHierarchy', {method: 'GET'}).then(
+    fetch('http://'+address+':5000/api/getFileHierarchy', {method: 'GET'}).then(
       response => response.json()
     ).then(
       data => { setProjects(data) }
