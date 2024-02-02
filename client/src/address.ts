@@ -1,0 +1,1 @@
+export const address = window.location.href.split(":")[1].replace("//", "");

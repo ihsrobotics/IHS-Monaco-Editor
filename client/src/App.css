@@ -1,110 +1,111 @@
-.toolBar{
-    width: 100vw;
-    height: 50px;
-    background-color: #1f2428;
-    border-bottom: 2px solid #1c2024;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-left: 32px;
-    padding-right: 16px;
+.toolBar {
+  width: 100vw;
+  height: 50px;
+  background-color: #1f2428;
+  border-bottom: 2px solid #1c2024;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 32px;
+  padding-right: 16px;
 }
 
 .appContainer {
-    display: flex;
-    flex-direction: row;
-    height: calc(100vh - 50px);
-    width: 100vw;
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 50px);
+  width: 100vw;
 }
 
 .rightSide {
-    min-width: 10%;
+  min-width: 10%;
 }
 
-body{
-    background-color: #1f2428;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+body {
+  background-color: #1f2428;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-
-.MuiButtonBase-root{
-    text-transform: unset !important;
+.MuiButtonBase-root {
+  text-transform: unset !important;
 }
 /* .greyButton{
     color: #BFC6C8 !important;
     border-color: #BFC6C8 !important;
 } */
 
-.MuiBox-root *::-webkit-scrollbar{
-    display: none;
+.MuiBox-root *::-webkit-scrollbar {
+  display: none;
 }
-.MuiBox-root *{
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    min-height: unset !important;
+.MuiBox-root * {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  min-height: unset !important;
 }
 
-.MuiTabs-indicator{
-    transition: none !important;
-    display: none;
+.MuiTabs-indicator {
+  transition: none !important;
+  display: none;
 }
-.MuiTabs-scrollButtons{
-    display: none !important;
+.MuiTabs-scrollButtons {
+  display: none !important;
 }
-.fileTab{
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
-    border-right: 1px solid rgba(255, 255, 255, 0.12);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    background-color: #24292e;
-    height: 30px
+.fileTab {
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #24292e;
+  height: 30px;
 }
-.fileTab > button{
-    all: unset;
-    /* touch-action: manipulation; */
+.fileTab > button {
+  all: unset;
+  /* touch-action: manipulation; */
 
-    font-family: inherit;
-    min-width: 125px;
-    max-width: 225px;
-    height: 30px;
-    cursor: pointer;
-    color: #BFC6C8 !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-wrap: nowrap;
-    padding: 0 6px 0 12px;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: inherit;
+  font-family: inherit;
+  min-width: 125px;
+  max-width: 225px;
+  height: 30px;
+  cursor: pointer;
+  color: #bfc6c8 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  padding: 0 6px 0 12px;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: inherit;
 }
-.fileTab > button > span{
-    overflow: hidden;
-    text-overflow: ellipsis;
+.fileTab > button > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.fileTab > button.Mui-selected{
-    border-top: 1px solid #90caf9;
+.fileTab > button.Mui-selected {
+  border-top: 1px solid #90caf9;
 }
-.fileTab > button:not(.Mui-selected) > button{
-    visibility: hidden;
+.fileTab > button:not(.Mui-selected) > button {
+  visibility: hidden;
 }
-.fileTab:hover > button:not(.Mui-selected) > button{
-    visibility: visible;
+.fileTab:hover > button:not(.Mui-selected) > button {
+  visibility: visible;
 }
-.fileTab > button.Mui-selected > button{
-    visibility: visible;
+.fileTab > button.Mui-selected > button {
+  visibility: visible;
 }
-.fileTab + .fileTab{
-    border-right: 0;
+.fileTab + .fileTab {
+  border-right: 0;
 }
-.fileTab:first-child{
-    border-right: 0;
+.fileTab:first-child {
+  border-right: 0;
 }
-.MuiTabPanel-root{
-    padding: 0 !important;
-    height: calc(100vh - 81px);
+.MuiTabPanel-root {
+  padding: 0 !important;
+  height: calc(100vh - 81px);
 }

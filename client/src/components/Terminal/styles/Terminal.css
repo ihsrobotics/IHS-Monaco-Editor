@@ -1,0 +1,41 @@
+.user {
+  color: #84e79d;
+}
+.path {
+  color: #90caf9;
+}
+
+#terminalInput {
+  display: inline;
+  position: relative;
+
+  outline-color: unset;
+  outline-style: unset;
+  outline-width: unset;
+  outline-offset: unset;
+
+  overflow-wrap: wrap;
+  text-wrap: wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+
+  caret-color: #bfc6c8;
+
+  caret-shape: block;
+}
+/* #terminalInput::selection{
+    background: initial;
+}
+#terminalInput::-moz-selection{
+    background: initial
+} */
+
+.response {
+  overflow-wrap: wrap;
+  text-wrap: wrap;
+  word-wrap: break-word;
+}
+
+.currentCommand {
+  width: 100%;
+}
