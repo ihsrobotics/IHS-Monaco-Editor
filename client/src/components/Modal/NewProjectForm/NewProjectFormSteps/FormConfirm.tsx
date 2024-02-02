@@ -11,7 +11,7 @@ import { newFile, newFolder, saveFile } from "../../../../shell";
 import { useContext } from "react";
 import path from "path-browserify";
 import { ToastContext, ToastFunction } from "../../../Toast/ToastContext";
-import { address } from "../../../../address";
+import { ADDRESS } from "../../../../address";
 import { LoadFilesContext } from "../../../Files/FilesContext";
 
 interface Props {
@@ -33,7 +33,7 @@ async function makeNewProject(
   loadFiles: () => void
 ) {
   try {
-    const pathInfo = await fetch("http://" + address + ":5000/api/getPath", {
+    const pathInfo = await fetch("http://" + ADDRESS + ":5000/api/getPath", {
       method: "GET",
     });
     const pathInfoJson = await pathInfo.json();
@@ -47,7 +47,7 @@ async function makeNewProject(
     });
 
     // create the main file
-    const response = await fetch("http://" + address + ":5000/api/writeBp", {
+    const response = await fetch("http://" + ADDRESS + ":5000/api/writeBp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ filePath: projectName, boilerplate: boilerplate }),

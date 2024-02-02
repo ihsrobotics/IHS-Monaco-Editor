@@ -4,7 +4,7 @@ import "./styles/FileListing.css";
 
 import FileComponent from "./File";
 import { LoadFilesContext } from "./FilesContext";
-import useUserSettings from "../../hooks/useUserSettings";
+import useUserSettingsContext from "../../hooks/useUserSettingsContext";
 
 type MultiDimensionalArray = (string | number)[] | MultiDimensionalArray[];
 type DirectoryObject = {[key: string]: {type: string, name: string} | DirectoryObject};
@@ -12,7 +12,7 @@ type DirectoryObject = {[key: string]: {type: string, name: string} | DirectoryO
 
 function FileListing() {
   // const { showEditorConfigFolder } = useContext(userSettingsContext);
-  const { userSettings } = useUserSettings();
+  const { userSettings } = useUserSettingsContext();
   const [fileList, setFileList] = useState<MultiDimensionalArray>([]);
 
   const { isFilesLoaded, projects, loadFiles } = useContext(LoadFilesContext);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./styles/Terminal.css";
 import path from "path-browserify";
 import { keyInt, liveShell } from "../../shell";
-import { address } from "../../address";
+import { ADDRESS } from "../../address";
 import useArray from "../../hooks/useArray";
 
 
@@ -153,7 +153,7 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
     document.addEventListener("keydown", handleWindowKeyDown);
     document.getElementById("terminalInput")?.addEventListener("keydown", handleKeyDown);
     if (!isTerminalLoaded)
-      fetch("http://" + address + ":5000/api/getPath", { method: "GET" })
+      fetch("http://" + ADDRESS + ":5000/api/getPath", { method: "GET" })
         .then((response) => response.json())
         .then((data) => {
           setCurrentDir(data["path"]);

@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useState } from "react";
-import { address } from "../../address";
+import { ADDRESS } from "../../address";
 
 export const LoadFilesContext = React.createContext<{
   isFilesLoaded: boolean;
@@ -27,7 +27,7 @@ function LoadFilesProvider({ children }: Props) {
     console.log("load files called")
     setProjects({});
     setIsFilesLoaded(false);
-    fetch("http://" + address + ":5000/api/getFileHierarchy", { method: "GET" })
+    fetch("http://" + ADDRESS + ":5000/api/getFileHierarchy", { method: "GET" })
       .then((response) => response.json())
       .then((data) => {
         console.log(data)

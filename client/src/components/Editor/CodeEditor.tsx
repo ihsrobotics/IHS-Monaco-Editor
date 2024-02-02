@@ -11,7 +11,7 @@ import {
   ReloadEditorContext,
 } from "../../App";
 import * as githubDark from "../../assets/github-dark.json"
-import useUserSettings from "../../hooks/useUserSettings";
+import useUserSettingsContext from "../../hooks/useUserSettingsContext";
 
 interface Props {
   fileName: string;
@@ -26,7 +26,7 @@ function CodeEditor({ fileName, content }: Props) {
   //   smoothCursorBlink,
   //   smoothCaretAnimation,
   // } = useContext(userSettingsContext);
-  const {userSettings} = useUserSettings();
+  const {userSettings} = useUserSettingsContext();
 
   const fileExtension: string =
     fileName.split(".").length > 1 ? fileName.split(".").pop()! : "";

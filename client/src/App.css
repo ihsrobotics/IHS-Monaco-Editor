@@ -39,10 +39,10 @@ body {
     border-color: #BFC6C8 !important;
 } */
 
-.MuiBox-root *::-webkit-scrollbar {
+.rightSide .MuiBox-root *::-webkit-scrollbar {
   display: none;
 }
-.MuiBox-root * {
+.rightSide .MuiBox-root * {
   -ms-overflow-style: none;
   scrollbar-width: none;
   min-height: unset !important;

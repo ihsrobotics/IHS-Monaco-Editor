@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 
 export type settingItem =
   | "ligatures"
@@ -13,22 +13,33 @@ export type settingItem =
   | "cppIntellisense"
   | "saveButtonSaveProject";
 
-function useUserSettings() {
+const DEFAULT_SETTINGS = {
+  ligatures: true,
+  editorTheme: true,
+  smoothCursorBlink: true,
+  smoothCaretAnimation: true,
+  minimap: true,
+  saveFileOnFileChange: false,
+  saveFileOnEditorClose: true,
+  showEditorConfigFolder: false,
+  pythonIntellisense: false,
+  cppIntellisense: false,
+  saveButtonSaveProject: false,
+}
+
+interface Props {
+  children: ReactNode;
+}
+
+export const UserSettingsContext = React.createContext<{
+  userSettings: { [key in settingItem]: boolean };
+  updateUserSettings: (settingName: settingItem, newValue: boolean) => void
+}>({ userSettings: DEFAULT_SETTINGS, updateUserSettings: () => null });
+
+export default function UserSettingsProvider({ children }: Props) {
   const [userSettings, setUserSettings] = useState<{
     [key in settingItem]: boolean;
-  }>({
-    ligatures: true,
-    editorTheme: true,
-    smoothCursorBlink: true,
-    smoothCaretAnimation: true,
-    minimap: true,
-    saveFileOnFileChange: false,
-    saveFileOnEditorClose: true,
-    showEditorConfigFolder: false,
-    pythonIntellisense: false,
-    cppIntellisense: false,
-    saveButtonSaveProject: false,
-  });
+  }>(DEFAULT_SETTINGS);
 
   const fetchUserSettings = () => {
     try {
@@ -64,7 +75,9 @@ function useUserSettings() {
     }
   };
 
-  return { userSettings, updateUserSettings };
+  return (
+    <UserSettingsContext.Provider value={{ userSettings: userSettings, updateUserSettings: updateUserSettings }}>
+      {children}
+    </UserSettingsContext.Provider>
+  );
 }
-
-export default useUserSettings;

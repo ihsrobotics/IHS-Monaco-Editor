@@ -1,296 +1,90 @@
-import { Stack, Switch, Typography } from "@mui/material";
-// import { useContext } from "react";
-// import { userSettingsContext } from "../../App";
-import useUserSettings from "../../hooks/useUserSettings";
+import { Box, Typography } from "@mui/material";
+import useUserSettingsContext from "../../hooks/useUserSettingsContext";
+import UserSettingSwitch from "./UserSettingSwitch";
 
 function UserSettingsForm() {
-  // const {
-  //   ligatures,
-  //   setLigatures,
-  //   editorTheme,
-  //   setEditorTheme,
-  //   smoothCursorBlink,
-  //   setSmoothCursorBlink,
-  //   smoothCaretAnimation,
-  //   setSmoothCaretAnimation,
-  //   minimap,
-  //   setMinimap,
-  //   saveFileOnFileChange,
-  //   setSaveFileOnFileChange,
-  //   saveFileOnEditorClose,
-  //   setSaveFileOnEditorClose,
-  //   showEditorConfigFolder,
-  //   setShowEditorConfigFolder,
-  //   pythonIntellisense,
-  //   setPythonIntellisense,
-  //   cppIntellisense,
-  //   setCppIntellisense,
-  //   saveButtonSaveProject,
-  //   setSaveButtonSaveProject,
-  // } = useContext(userSettingsContext);
-  const { userSettings, updateUserSettings } = useUserSettings();
+  const { userSettings } = useUserSettingsContext();
 
   return (
     <>
-      <Typography variant="h6" component="h2" align="center" mb={3}>
+      <Typography variant="h6" component="h2" align="center" mb={3} width={400}>
         User Settings
       </Typography>
-      <Stack
-        direction={"row"}
+      <Box
         sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
+          maxHeight: "80vh",
+          overflowY: "auto",
         }}
-        alignSelf={"center"}
       >
-        Dark Theme
-        <Switch
+        <UserSettingSwitch
+          label="Dark Theme"
           checked={true}
-          onClick={() => alert("do you not like dark mode?")}
+          item="editorTheme"
+          specialBehaviorFunction={alert}
+          specialBehaviorParams={"do you not like dark mode?"}
         />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Editor Font Ligatures
-        <Switch
+        <UserSettingSwitch
+          label="Editor Font Ligatures"
           checked={userSettings.ligatures}
-          onChange={(e) => {
-            updateUserSettings("ligatures", e.target.checked);
-          }}
+          item="ligatures"
         />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Editor Minimap
-        <Switch
+        <UserSettingSwitch
+          label="Editor Minimap"
           checked={userSettings.minimap}
-          onChange={(e) => {
-            updateUserSettings("minimap", e.target.checked);
-          }}
+          item="minimap"
         />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Editor Smooth Cursor Blinking
-        <Switch
+        <UserSettingSwitch
+          label="Editor Smooth Cursor Blinking"
           checked={userSettings.smoothCursorBlink}
-          onChange={(e) => {
-            updateUserSettings("smoothCursorBlink", e.target.checked);
-          }}
+          item="smoothCursorBlink"
         />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Editor Smooth Caret Animation
-        <Switch
+        <UserSettingSwitch
+          label="Editor Smooth Caret Animation"
           checked={userSettings.smoothCaretAnimation}
-          onChange={(e) => {
-            updateUserSettings("smoothCaretAnimation", e.target.checked);
-          }}
+          item="smoothCaretAnimation"
         />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Editor Theme (VS Dark | GitHub Dark)
-        <Switch
+        <UserSettingSwitch
+          label="Editor Theme (VS Dark | GitHub Dark)"
           checked={userSettings.editorTheme}
-          onChange={(e) => {
-            updateUserSettings("editorTheme", e.target.checked);
-          }}
+          item="editorTheme"
         />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        C++ IntelliSense
-        <Switch
-          disabled
+        <UserSettingSwitch
+          label="C++ Intellisense"
           checked={userSettings.cppIntellisense}
-          onChange={(e) => {
-            updateUserSettings("cppIntellisense", e.target.checked);
-          }}
-        />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Python IntelliSense
-        <Switch
+          item="cppIntellisense"
           disabled
+        />
+        <UserSettingSwitch
+          label="Python Intellisense"
           checked={userSettings.pythonIntellisense}
-          onChange={(e) => {
-            updateUserSettings("pythonIntellisense", e.target.checked);
-          }}
-        />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Save Button Behavior (File Only | Project)
-        <Switch
+          item="pythonIntellisense"
           disabled
+        />
+        <UserSettingSwitch
+          label="Save Button Behavior (File Only | Project)"
           checked={userSettings.saveButtonSaveProject}
-          onChange={(e) => {
-            updateUserSettings("saveButtonSaveProject", e.target.checked);
-          }}
-        />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Save File on Editor Close
-        <Switch
-          checked={userSettings.saveFileOnEditorClose}
-          onChange={(e) => {
-            updateUserSettings("saveFileOnEditorClose", e.target.checked);
-          }}
-        />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Save File on File Change
-        <Switch
+          item="saveButtonSaveProject"
           disabled
+        />
+        <UserSettingSwitch
+          label="Save File on Editor Close"
+          checked={userSettings.saveFileOnEditorClose}
+          item="saveFileOnEditorClose"
+        />
+        <UserSettingSwitch
+          label="Save File on File Change"
           checked={userSettings.saveFileOnFileChange}
-          onChange={(e) => {
-            updateUserSettings("saveFileOnFileChange", e.target.checked);
-          }}
+          item="saveFileOnFileChange"
+          disabled
         />
-      </Stack>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "400px",
-          borderBottom: 0.5,
-        }}
-        alignSelf={"center"}
-      >
-        Show Project Config Folder (.editor)
-        <Switch
+        <UserSettingSwitch
+          label="Show Project Config Folder (.editor)"
           checked={userSettings.showEditorConfigFolder}
-          onChange={(e) => {
-            updateUserSettings("showEditorConfigFolder", e.target.checked);
-          }}
+          item="showEditorConfigFolder"
         />
-      </Stack>
+      </Box>
     </>
   );
 }
-
-// export function saveSettings() {
-//   const {
-//     ligatures,
-//     editorTheme,
-//     smoothCursorBlink,
-//     smoothCaretAnimation,
-//     minimap,
-//     saveFileOnFileChange,
-//     saveFileOnEditorClose,
-//     showEditorConfigFolder,
-//     pythonIntellisense,
-//     cppIntellisense,
-//     saveButtonSaveProject,
-//   } = useContext(userSettingsContext);
-//   localStorage.setItem("ligatures", ligatures.toString());
-//   localStorage.setItem("editorTheme", editorTheme.toString());
-//   localStorage.setItem("smoothCursorBlink", smoothCursorBlink.toString());
-//   localStorage.setItem("smoothCaretAnimation", smoothCaretAnimation.toString());
-//   localStorage.setItem("minimap", minimap.toString());
-//   localStorage.setItem("saveFileOnFileChange", saveFileOnFileChange.toString());
-//   localStorage.setItem(
-//     "saveFileOnEditorClose",
-//     saveFileOnEditorClose.toString()
-//   );
-//   localStorage.setItem(
-//     "showEditorConfigFolder",
-//     showEditorConfigFolder.toString()
-//   );
-//   localStorage.setItem("pythonIntellisense", pythonIntellisense.toString());
-//   localStorage.setItem("cppIntellisense", cppIntellisense.toString());
-//   localStorage.setItem(
-//     "saveButtonSaveProject",
-//     saveButtonSaveProject.toString()
-//   );
-// }
 
 export default UserSettingsForm;

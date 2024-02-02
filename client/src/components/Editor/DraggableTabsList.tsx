@@ -22,7 +22,7 @@ import {
 import { saveFile } from "../../shell";
 import { ToastContext } from "../Toast/ToastContext";
 import FileName from "../Files/FileName";
-import useUserSettings from "../../hooks/useUserSettings";
+import useUserSettingsContext from "../../hooks/useUserSettingsContext";
 
 interface Props {
   onDragEnd: (arg0: DropResult) => void;
@@ -31,7 +31,7 @@ interface Props {
 export default function DraggableTabsList({ onDragEnd }: Props) {
   // const { saveFileOnEditorClose } = React.useContext(userSettingsContext);
 
-  const { userSettings } = useUserSettings();
+  const { userSettings } = useUserSettingsContext();
 
   const {useToast} = React.useContext(ToastContext);
 
