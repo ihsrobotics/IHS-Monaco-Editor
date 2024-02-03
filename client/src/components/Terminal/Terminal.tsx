@@ -28,10 +28,13 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
   const createPrompt = (pwd: string) => {
     return (
       <>
-        <span className="user">{user}</span>:
-        <span className="path">
-          {pwd.includes(home) ? "~/" + path.relative(home, pwd) : pwd}
-        </span>
+        <strong>
+          <span className="user">{user}</span>:
+          <span className="path">
+            {pwd.includes(home) ? "~/" + path.relative(home, pwd) : pwd}
+          </span>
+        </strong>
+        
         $&nbsp;
       </>
     );
