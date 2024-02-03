@@ -1,6 +1,5 @@
 import { Link, Typography } from "@mui/material";
-import {version} from './../../../package.json';
-
+import { version } from "./../../../package.json";
 
 function Info() {
   return (
@@ -23,6 +22,9 @@ function Info() {
         Unreleased features: full collaborative editing, intellisense, advanced
         save features
         <br /> <br />
+        To rename, delete, or to add new file or folder, shift and hover over an
+        existing file or folder.
+        <br />
         Avoid using spaces or special characters in file names to prevent
         unexpected errors.
         <br />

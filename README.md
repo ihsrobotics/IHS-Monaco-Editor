@@ -5,18 +5,14 @@ A custom Monaco-based code editor for IHS Robotics.
 
 ## Installation
 
-First, make the folder where the user generated files will be stored. (note: do not clone the repository into this folder).
-
-`cd ~/Documents && mkdir IME_files`
-
-Before installing, you need to install the Node.js dependencies. You need at least nodejs v16.
+Before installing, you need to install the Node.js dependencies. You need at least Node.js v16.
 
 Linux (Raspbian/Ubuntu/Debian)
 
-```bash
+```shell
 sudo apt-get update
 sudo apt-get install -y curl
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E shell -
 sudo apt-get install -y nodejs
 ```
 
@@ -30,7 +26,7 @@ Then, clone the source files.
 
 `cd` into the cloned directory, and install all the node modules.
 
-```bash
+```shell
 cd server && npm install
 cd ..
 ```
@@ -39,7 +35,7 @@ You only need to install the node modules in the client directory if you are dow
 
 To build from source (for development):
 
-```bash
+```shell
 cd client
 npm install
 npm run build
@@ -51,7 +47,7 @@ Finally, serve the frontend and backend.
 
 Backend
 
-```bash
+```shell
 sudo npm install -g pm2
 cd server
 pm2 start index.js
@@ -59,7 +55,7 @@ pm2 start index.js
 
 Frontend (you don't necessarily have to use port 3000)
 
-```bash
+```shell
 sudo npm install -g serve
 cd client
 serve -s dist -l 3000
@@ -73,7 +69,7 @@ To open the crontab file:
 
 Then at the first available line, type toe following:
 
-```bash
+```shell
 @reboot pm2 start <your path>/IHS-Monaco-Editor/server/index.js
 @reboot serve -s <your path>/IHS-Monaco-Editor/client/dist -l 3000
 ```
@@ -98,6 +94,7 @@ Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
 - Compatibility with Raspberry Pi server
 
 ### Version 1.2.0
+
 - Complete refactor of source code for easier development and maintenance
 
 ### Future Plans

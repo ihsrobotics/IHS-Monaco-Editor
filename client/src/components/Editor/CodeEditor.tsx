@@ -1,5 +1,5 @@
 import Editor from "@monaco-editor/react";
-import Loader from "@monaco-editor/loader";
+import loader from "@monaco-editor/loader";
 import * as monaco from "monaco-editor";
 import { useContext, useRef } from "react";
 import * as Y from "yjs";
@@ -42,7 +42,7 @@ function CodeEditor({ fileName, content }: Props) {
   const [isThemeLoaded, setIsThemeLoaded] = useState(false);
   useEffect(() => {
     if(userSettings.editorTheme)
-      Loader.init()
+      loader.init()
         .then((monaco) => {
           // fetch("./../../assets/github-dark.json")
           //   .then((response) => {

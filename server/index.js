@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs").promises;
+const fsSync = require("fs");
 const path = require("path");
 const { exec, spawn } = require("child_process");
 const cors = require("cors");
@@ -12,6 +13,11 @@ app.use(cors());
 
 // directory path of all editor files
 const DIRECTORY_PATH = path.join(process.env.HOME, "Documents", "IME_files");
+
+if (!fsSync.existsSync(DIRECTORY_PATH)) {
+  console.log("project dir doesn't exist");
+  fsSync.mkdirSync(DIRECTORY_PATH, { recursive: true });
+}
 
 process.env.PYTHONUNBUFFERED = "1";
 
@@ -250,15 +256,15 @@ function isProcess(pid) {
 app.post("/api/kill", (req, res) => {
   const { pid } = req.body;
   console.log("pid to kill", pid);
-  if(isProcess(Number.parseInt(pid) + 1))
-    process.kill(Number.parseInt(pid) + 1, "SIGINT")
+  if (isProcess(Number.parseInt(pid) + 1))
+    process.kill(Number.parseInt(pid) + 1, "SIGINT");
   setTimeout(() => {
-    if(isProcess(Number.parseInt(pid) + 1))
-      process.kill(Number.parseInt(pid) + 1, "SIGINT")
+    if (isProcess(Number.parseInt(pid) + 1))
+      process.kill(Number.parseInt(pid) + 1, "SIGINT");
   }, 100);
   setTimeout(() => {
-    if(isProcess(Number.parseInt(pid) + 1))
-      process.kill(Number.parseInt(pid) + 1, "SIGTERM")
+    if (isProcess(Number.parseInt(pid) + 1))
+      process.kill(Number.parseInt(pid) + 1, "SIGTERM");
   }, 200);
 });
 
