@@ -69,7 +69,7 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
       if (input === "clear") {
         terminalCommands.setArray([]);
         commandHistory.push(input);
-        setCommandHistoryIndex(commandHistory.array.length + 1);
+        setCommandHistoryIndex(commandHistory.length + 1);
         (e.target as HTMLDivElement).innerText = "";
         return;
       }
@@ -79,7 +79,7 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
         console.log("command:", input);
         // setCommandHistory([...commandHistory, input]);
         commandHistory.push(input);
-        setCommandHistoryIndex(commandHistory.array.length + 1);
+        setCommandHistoryIndex(commandHistory.length + 1);
         terminalCommands.push([currentDir, input, ""]);
         setIsFinished(false);
         liveShell(
@@ -119,9 +119,9 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
       else{
         (e.target as HTMLDivElement).innerText = currentCommand;
         setCommandHistoryIndex(
-            commandHistoryIndex < commandHistory.array.length
+            commandHistoryIndex < commandHistory.length
               ? commandHistoryIndex + 1
-              : commandHistory.array.length
+              : commandHistory.length
         )
       }
     } 

@@ -1,95 +1,26 @@
-import {
-  ReactElement,
-  useEffect,
-  useState,
-  MouseEvent,
-} from "react";
+import { ReactElement, useEffect, useState, MouseEvent } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
-import BeginBranch from "../../assets/branches/beginBranch.svg";
-import BeginBranchEnd from "../../assets/branches/beginBranchEnd.svg";
-import ContBranch from "../../assets/branches/contBranch.svg";
-import BranchEnd from "../../assets/branches/branchEnd.svg";
-
-import Straight from "../../assets/branches/straight.svg";
-import StraightEnd from "../../assets/branches/StraightEnd.svg";
 import FileToolButtons from "./FileToolButtons";
 import FileName from "./FileName";
+import useBranches from "./hooks/useBranches";
+import Branches from "./Branches";
 
 interface Props {
   name: string;
   depth: number;
   isOpened?: boolean;
-  // onOpen(arg0: string): void,
   children: ReactElement;
 }
 
-
 function Directory({ name, depth, children }: Props) {
   const [opened, setOpened] = useState(false);
-  const [branchArray, setBranchArray] = useState<string[]>([]);
 
   const handleClick = () => {
     setOpened(!opened);
   };
 
-  const addStraightBranch = (
-    directoryName: string,
-    newBranchArray: string[]
-  ) => {
-    if (
-      document.getElementById(directoryName) == null ||
-      directoryName == null
-    ) {
-      return;
-    }
-    const children = document.getElementById(directoryName)!.children;
-    for (let i = 0; i < children.length; i++) {
-      newBranchArray.push(Straight);
-      if (
-        children[i].classList.contains("directory") &&
-        children[i].getAttribute("data-opened") == "true"
-      ) {
-        addStraightBranch(
-          children[i].getAttribute("data-name")!,
-          newBranchArray
-        );
-      }
-    }
-  };
-
-  const handleUpdateBranches = (directoryName: string) => {
-    const newBranchArray: string[] = [];
-    if (document.getElementById(directoryName) == null) {
-      return;
-    }
-    const children = document.getElementById(directoryName)!.children;
-    for (let i = 0; i < children.length; i++) {
-      newBranchArray.push(ContBranch);
-      // recursive search directory
-      if (
-        children[i].classList.contains("directory") &&
-        children[i].getAttribute("data-opened") == "true"
-      ) {
-        addStraightBranch(
-          children[i].getAttribute("data-name")!,
-          newBranchArray
-        );
-      }
-    }
-    if (newBranchArray.length == 1) {
-      newBranchArray[0] = BeginBranchEnd;
-    } else {
-      newBranchArray[0] = BeginBranch;
-      if (newBranchArray[newBranchArray.length - 1] == Straight) {
-        newBranchArray[newBranchArray.length - 1] = StraightEnd;
-      } else {
-        newBranchArray[newBranchArray.length - 1] = BranchEnd;
-      }
-    }
-    setBranchArray(newBranchArray);
-  };
+  const { branchArray, updateBranches } = useBranches();
 
   const [isHovered, setIsHovered] = useState(false);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
@@ -130,11 +61,12 @@ function Directory({ name, depth, children }: Props) {
     <div
       className="directory"
       data-opened={opened}
-      onClick={() =>
+      onClick={
+        () =>
           setTimeout(() => {
-            handleUpdateBranches(name)
+            updateBranches(name);
           }, 10)
-          // the set timeout is so that the 'data-opened' attribute has time to update before updating the branches
+        // the set timeout is so that the 'data-opened' attribute has time to update before updating the branches
       }
       data-name={name}
     >
@@ -153,20 +85,16 @@ function Directory({ name, depth, children }: Props) {
           ) : (
             <ChevronRightIcon style={{ height: "24px", width: "24px" }} />
           )}
-          {/* <FolderIcon style={{ height: "20px", width: "24px" }} />
-          <span>{name.split("/").slice(-1).toString()}</span> */}
           <FileName fileName={name.split("/").slice(-1).toString()} folder />
         </span>
-        <FileToolButtons fileType="folder" fileName={name} visible={isHovered && isShiftPressed} />
+        <FileToolButtons
+          fileType="folder"
+          fileName={name}
+          visible={isHovered && isShiftPressed}
+        />
       </div>
 
-      {opened && 
-        <div className="branch" style={{ left: depth * 24 + "px" }}>
-          {branchArray.map((value, index) => (
-            <img src={value} alt="" key={index} />
-          ))}
-        </div>
-      }
+      {opened && <Branches branchArray={branchArray} depth={depth} />}
 
       {children}
     </div>
