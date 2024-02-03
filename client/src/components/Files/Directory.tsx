@@ -1,10 +1,11 @@
-import { ReactElement, useEffect, useState, MouseEvent } from "react";
+import { ReactElement, useState } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import FileToolButtons from "./FileToolButtons";
 import FileName from "./FileName";
 import useBranches from "./hooks/useBranches";
 import Branches from "./Branches";
+import useFileTools from "./hooks/useFileTools";
 
 interface Props {
   name: string;
@@ -21,41 +22,7 @@ function Directory({ name, depth, children }: Props) {
   };
 
   const { branchArray, updateBranches } = useBranches();
-
-  const [isHovered, setIsHovered] = useState(false);
-  const [isShiftPressed, setIsShiftPressed] = useState(false);
-
-  const handleMouseEnter = (e: MouseEvent<HTMLDivElement>) => {
-    if (window.getComputedStyle(e.currentTarget).cursor == "col-resize") {
-      e.currentTarget.classList.remove("hoverEffect");
-    } else {
-      e.currentTarget.classList.add("hoverEffect");
-    }
-    setIsHovered(true);
-  };
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.shiftKey) {
-      setIsShiftPressed(true);
-    }
-  };
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (!e.shiftKey) {
-      setIsShiftPressed(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
+  const {isShiftPressed, isHovered, handleMouseEnter, handleMouseLeave} = useFileTools();
 
   return (
     <div

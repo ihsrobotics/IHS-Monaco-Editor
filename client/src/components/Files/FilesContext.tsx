@@ -12,7 +12,7 @@ export const LoadFilesContext = React.createContext<{
   setIsFilesLoaded: () => null,
   projects: {},
   setProjects: () => null,
-  loadFiles: () => {console.log("default call")}
+  loadFiles: () => null
 });
 
 interface Props {
