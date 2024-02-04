@@ -1,8 +1,9 @@
-import Editor from "@monaco-editor/react";
+import loadable from "@loadable/component";
+const Editor = loadable(() => import("@monaco-editor/react"));
 import loader from "@monaco-editor/loader";
-import {editor} from "monaco-editor";
+import { editor } from "monaco-editor";
 import { useContext, useRef } from "react";
-import {Doc} from "yjs";
+import { Doc } from "yjs";
 import { WebrtcProvider } from "y-webrtc";
 import { MonacoBinding } from "y-monaco";
 import { useState, useEffect } from "react";
@@ -14,6 +15,7 @@ interface Props {
   fileName: string;
   content: Promise<string>;
 }
+
 
 function CodeEditor({ fileName, content }: Props) {
   // const {
