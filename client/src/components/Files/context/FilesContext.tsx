@@ -27,7 +27,7 @@ function LoadFilesProvider({ children }: Props) {
     console.log("load files called");
     setProjects({});
     setIsFilesLoaded(false);
-    fetch("http://" + ADDRESS + ":" + PORT + "/api/getFileHierarchy", {
+    fetch(`http://${ADDRESS}:${PORT}/api/getFileHierarchy`, {
       method: "GET",
     })
       .then((response) => response.json())

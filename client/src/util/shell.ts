@@ -14,7 +14,7 @@ export function rename(
   }
   newName = newName.replace(/[^a-zA-Z0-9_-]/g, "");
   newName = oldName.slice(0, oldName.lastIndexOf("/")) + "/" + newName;
-  fetch("http://" + ADDRESS + ":" + PORT + "/api/shell", {
+  fetch(`http://${ADDRESS}:${PORT}/api/shell`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ command: "mv " + oldName + " " + newName }),
@@ -41,7 +41,7 @@ export function deleteItem(
   if (!confirm("delete " + name + "?")) {
     return;
   }
-  fetch("http://" + ADDRESS + ":" + PORT + "/api/shell", {
+  fetch(`http://${ADDRESS}:${PORT}/api/shell`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ command: "rm -rf " + name }),
@@ -71,7 +71,7 @@ export async function newFile(
     return;
   }
   fileName = fileName.replace(/[^a-zA-Z0-9_\-.]/g, "");
-  await fetch("http://" + ADDRESS + ":" + PORT + "/api/shell", {
+  await fetch(`http://${ADDRESS}:${PORT}/api/shell`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ command: "touch " + path + "/" + fileName }),
@@ -103,7 +103,7 @@ export async function newFolder(
     return;
   }
   folderName = folderName.replace(/[^a-zA-Z0-9_\-.]/g, "");
-  await fetch("http://" + ADDRESS + ":" + PORT + "/api/shell", {
+  await fetch(`http://${ADDRESS}:${PORT}/api/shell`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -131,7 +131,7 @@ export async function newFolder(
 
 export async function getFile(path: string) {
   const response = await fetch(
-    "http://" + ADDRESS + ":" + PORT + "/api/getFile?filename=" + path,
+    `http://${ADDRESS}:${PORT}/api/getFile?filename=${path}`,
     { method: "GET" }
   );
   const data = await response.json();
@@ -145,7 +145,7 @@ export async function saveFile(
   toast?: ToastFunction
 ) {
   console.log(fileName);
-  await fetch("http://" + ADDRESS + ":" + PORT + "/api/saveFile", {
+  await fetch(`http://${ADDRESS}:${PORT}/api/saveFile`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ fileName: fileName, content: fileContent }),
@@ -175,14 +175,11 @@ export async function command(
   successMessage?: string
 ) {
   try {
-    const response = await fetch(
-      "http://" + ADDRESS + ":" + PORT + "/api/shell",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ command: command }),
-      }
-    );
+    const response = await fetch(`http://${ADDRESS}:${PORT}/api/shell`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ command: command }),
+    });
     if (toast && successMessage) {
       if (response.status == 200) toast(true, "success", successMessage);
       else
@@ -297,14 +294,11 @@ export async function liveShell(
   newTerminalOutput: [string, string, string],
   setCurrentDir: React.Dispatch<SetStateAction<string>>
 ) {
-  const response = await fetch(
-    "http://" + ADDRESS + ":" + PORT + "/api/liveShell",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ command: command, cwd: cwd }),
-    }
-  );
+  const response = await fetch(`http://${ADDRESS}:${PORT}/api/liveShell`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ command: command, cwd: cwd }),
+  });
   const reader = response.body?.getReader();
   let output = "";
 
@@ -348,7 +342,7 @@ export async function liveShell(
 
 export function keyInt(pid: number | undefined) {
   if (pid == undefined) return;
-  fetch("http://" + ADDRESS + ":" + PORT + "/api/kill", {
+  fetch(`http://${ADDRESS}:${PORT}/api/kill`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ pid: pid }),

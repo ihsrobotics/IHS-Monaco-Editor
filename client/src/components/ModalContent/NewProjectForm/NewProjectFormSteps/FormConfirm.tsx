@@ -36,12 +36,9 @@ async function makeNewProject(
   loadFiles: () => void
 ) {
   try {
-    const pathInfo = await fetch(
-      "http://" + ADDRESS + ":" + PORT + "/api/getPath",
-      {
-        method: "GET",
-      }
-    );
+    const pathInfo = await fetch(`http://${ADDRESS}:${PORT}/api/getPath`, {
+      method: "GET",
+    });
     const pathInfoJson = await pathInfo.json();
     const directoryPath = pathInfoJson["path"];
     // make the project folder
@@ -53,17 +50,14 @@ async function makeNewProject(
     });
 
     // create the main file
-    const response = await fetch(
-      "http://" + ADDRESS + ":" + PORT + "/api/writeBp",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          filePath: projectName,
-          boilerplate: boilerplate,
-        }),
-      }
-    );
+    const response = await fetch(`http://${ADDRESS}:${PORT}/api/writeBp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filePath: projectName,
+        boilerplate: boilerplate,
+      }),
+    });
     if (!response.ok) throw "error in creating boilerplate, " + response.json();
 
     // create the project configurations

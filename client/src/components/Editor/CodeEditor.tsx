@@ -44,19 +44,6 @@ function CodeEditor({ fileName, content }: Props) {
       loader
         .init()
         .then((monaco) => {
-          // fetch("./../../assets/github-dark.json")
-          //   .then((response) => {
-          //     console.log(response);
-          //     return response.json();
-          //   })
-          //   .then((data) => {
-          //     console.log("data", data);
-          //     monaco.editor.defineTheme(
-          //       "github-dark",
-          //       data as monaco.editor.IStandaloneThemeData
-          //     );
-          //     setIsThemeLoaded(true);
-          //   });
           monaco.editor.defineTheme(
             "github-dark",
             githubDark as editor.IStandaloneThemeData

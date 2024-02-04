@@ -9,7 +9,7 @@ function useTerminalUser() {
 
   useEffect(() => {
     if (!isTerminalLoaded)
-      fetch("http://" + ADDRESS + ":" + PORT + "/api/getPath", {
+      fetch(`http://${ADDRESS}:${PORT}/api/getPath`, {
         method: "GET",
       })
         .then((response) => response.json())
