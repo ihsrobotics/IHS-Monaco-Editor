@@ -18,13 +18,6 @@ interface Props {
 
 
 function CodeEditor({ fileName, content }: Props) {
-  // const {
-  //   ligatures,
-  //   editorTheme,
-  //   minimap,
-  //   smoothCursorBlink,
-  //   smoothCaretAnimation,
-  // } = useContext(userSettingsContext);
   const { userSettings } = useUserSettingsContext();
 
   const fileExtension: string =
