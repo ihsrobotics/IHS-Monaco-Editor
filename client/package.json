@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build-sourcemap": "tsc && vite build --sourcemap 'true'",
+    "sourcemap": "source-map-explorer --html sourcemap.html --no-border-checks"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -21,6 +23,7 @@
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
     "y-monaco": "^0.1.5",
     "y-webrtc": "^10.2.6",
     "yjs": "^13.6.10"
