@@ -1,8 +1,8 @@
 import Editor from "@monaco-editor/react";
 import loader from "@monaco-editor/loader";
-import * as monaco from "monaco-editor";
+import {editor} from "monaco-editor";
 import { useContext, useRef } from "react";
-import * as Y from "yjs";
+import {Doc} from "yjs";
 import { WebrtcProvider } from "y-webrtc";
 import { MonacoBinding } from "y-monaco";
 import { useState, useEffect } from "react";
@@ -31,10 +31,10 @@ function CodeEditor({ fileName, content }: Props) {
   const { tabs, setTabs } = useContext(FileTabContext);
   const index = tabs.findIndex((tab) => tab.value === fileName);
 
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+  const editorRef = useRef<editor.IStandaloneCodeEditor>();
   let provider: WebrtcProvider;
   let monacoBinding: MonacoBinding;
-  let doc: Y.Doc;
+  let doc: Doc;
 
   const [isThemeLoaded, setIsThemeLoaded] = useState(false);
   useEffect(() => {
@@ -57,7 +57,7 @@ function CodeEditor({ fileName, content }: Props) {
           //   });
           monaco.editor.defineTheme(
             "github-dark",
-            githubDark as monaco.editor.IStandaloneThemeData
+            githubDark as editor.IStandaloneThemeData
           );
           setIsThemeLoaded(true);
         })
@@ -81,9 +81,9 @@ function CodeEditor({ fileName, content }: Props) {
 
   const [fileLoaded, setFileLoaded] = useState(false);
 
-  function handleEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor) {
+  function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
     editorRef.current = editor;
-    doc = new Y.Doc();
+    doc = new Doc();
     provider = new WebrtcProvider(fileName, doc);
     const type = doc.getText("monaco");
 

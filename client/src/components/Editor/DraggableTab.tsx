@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Draggable } from "@hello-pangea/dnd";
 
 interface Props {
