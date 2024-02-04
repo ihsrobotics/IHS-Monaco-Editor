@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SideBar from "./components/Files/SideBar";
-import "./App.css";
+import "./styles/App.css";
 import FileListing from "./components/Files/FileListing";
 
 import React from "react";
