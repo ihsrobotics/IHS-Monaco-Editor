@@ -6,12 +6,9 @@ import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc";
 import { MonacoBinding } from "y-monaco";
 import { useState, useEffect } from "react";
-import {
-  FileTabContext,
-  ReloadEditorContext,
-} from "../../App";
-import * as githubDark from "../../assets/github-dark.json"
-import useUserSettingsContext from "../../hooks/useUserSettingsContext";
+import { FileTabContext, ReloadEditorContext } from "../../App";
+import * as githubDark from "../../assets/github-dark.json";
+import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
 
 interface Props {
   fileName: string;
@@ -26,7 +23,7 @@ function CodeEditor({ fileName, content }: Props) {
   //   smoothCursorBlink,
   //   smoothCaretAnimation,
   // } = useContext(userSettingsContext);
-  const {userSettings} = useUserSettingsContext();
+  const { userSettings } = useUserSettingsContext();
 
   const fileExtension: string =
     fileName.split(".").length > 1 ? fileName.split(".").pop()! : "";
@@ -41,8 +38,9 @@ function CodeEditor({ fileName, content }: Props) {
 
   const [isThemeLoaded, setIsThemeLoaded] = useState(false);
   useEffect(() => {
-    if(userSettings.editorTheme)
-      loader.init()
+    if (userSettings.editorTheme)
+      loader
+        .init()
         .then((monaco) => {
           // fetch("./../../assets/github-dark.json")
           //   .then((response) => {
@@ -57,7 +55,10 @@ function CodeEditor({ fileName, content }: Props) {
           //     );
           //     setIsThemeLoaded(true);
           //   });
-          monaco.editor.defineTheme('github-dark', githubDark as monaco.editor.IStandaloneThemeData);
+          monaco.editor.defineTheme(
+            "github-dark",
+            githubDark as monaco.editor.IStandaloneThemeData
+          );
           setIsThemeLoaded(true);
         })
         .catch((error) => console.log(error));
@@ -74,9 +75,9 @@ function CodeEditor({ fileName, content }: Props) {
     };
   }, []);
 
-  const {reloadEditorFlag} = useContext(ReloadEditorContext)
+  const { reloadEditorFlag } = useContext(ReloadEditorContext);
 
-  useEffect(() => {}, [reloadEditorFlag])
+  useEffect(() => {}, [reloadEditorFlag]);
 
   const [fileLoaded, setFileLoaded] = useState(false);
 
@@ -120,7 +121,7 @@ function CodeEditor({ fileName, content }: Props) {
 
   function handleChange() {
     if (editorRef.current == undefined || !fileLoaded) return;
-    setTabs(prevTabs => {
+    setTabs((prevTabs) => {
       prevTabs[index].editorContent = editorRef.current!.getValue();
       prevTabs[index].editorSaved = false;
       return [...prevTabs];
@@ -143,12 +144,18 @@ function CodeEditor({ fileName, content }: Props) {
           height="100%"
           width="100%"
           onMount={handleEditorDidMount}
-          theme={isThemeLoaded && userSettings.editorTheme ? "github-dark" : "vs-dark"}
+          theme={
+            isThemeLoaded && userSettings.editorTheme
+              ? "github-dark"
+              : "vs-dark"
+          }
           options={{
             fontLigatures: userSettings.ligatures,
             fontFamily: "Fira Code",
             cursorBlinking: userSettings.smoothCursorBlink ? "phase" : "blink",
-            cursorSmoothCaretAnimation: userSettings.smoothCaretAnimation ? "on" : "off",
+            cursorSmoothCaretAnimation: userSettings.smoothCaretAnimation
+              ? "on"
+              : "off",
             minimap: { enabled: userSettings.minimap },
           }}
           language={

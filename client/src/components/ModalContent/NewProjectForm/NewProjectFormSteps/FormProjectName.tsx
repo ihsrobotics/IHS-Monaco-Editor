@@ -9,7 +9,7 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { projectProps } from "../useNewProjectForm";
+import { projectProps } from "../hooks/useNewProjectForm";
 
 interface Props {
   nextStep: (arg0?: number) => void;

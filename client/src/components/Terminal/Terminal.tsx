@@ -3,8 +3,7 @@ import "./styles/Terminal.css";
 import path from "path-browserify";
 import { keyInt, liveShell } from "../../shell";
 import { ADDRESS } from "../../address";
-import useArray from "../../hooks/useArray";
-
+import useArray from "../../util/hooks/useArray";
 
 interface Props {
   isFinished: boolean;
@@ -13,10 +12,10 @@ interface Props {
   setPID: (arg0: number) => void;
 }
 
-function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
+function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
   const terminalCommands = useArray<[string, string, string]>([]);
   const [home, setHome] = useState("");
-  const [currentDir, setCurrentDir] = useState("");  
+  const [currentDir, setCurrentDir] = useState("");
   const [user, setUser] = useState("");
 
   const [currentCommand, setCurrentCommand] = useState<string>("");
@@ -34,7 +33,6 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
             {pwd.includes(home) ? "~/" + path.relative(home, pwd) : pwd}
           </span>
         </strong>
-        
         $&nbsp;
       </>
     );
@@ -96,7 +94,7 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
 
       // empty command
       else {
-        terminalCommands.push([currentDir, input, '']);
+        terminalCommands.push([currentDir, input, ""]);
       }
 
       // clear the input box
@@ -105,30 +103,31 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
         document.querySelector(".app-bottomBar-content")!.scrollHeight;
     } else if (e.key == "ArrowUp") {
       e.preventDefault();
-      if(commandHistory.array[commandHistoryIndex - 1]){
-        (e.target as HTMLDivElement).innerText = commandHistory.array[commandHistoryIndex - 1];
+      if (commandHistory.array[commandHistoryIndex - 1]) {
+        (e.target as HTMLDivElement).innerText =
+          commandHistory.array[commandHistoryIndex - 1];
         setCommandHistoryIndex(commandHistoryIndex - 1);
       }
       setCurrentCommand((e.target as HTMLDivElement).innerText);
     } else if (e.key == "ArrowDown") {
       e.preventDefault();
-      if(commandHistory.array[commandHistoryIndex + 1]){
-        (e.target as HTMLDivElement).innerText = commandHistory.array[commandHistoryIndex + 1];
-        setCommandHistoryIndex(commandHistoryIndex + 1)
-      }
-      else{
+      if (commandHistory.array[commandHistoryIndex + 1]) {
+        (e.target as HTMLDivElement).innerText =
+          commandHistory.array[commandHistoryIndex + 1];
+        setCommandHistoryIndex(commandHistoryIndex + 1);
+      } else {
         (e.target as HTMLDivElement).innerText = currentCommand;
         setCommandHistoryIndex(
-            commandHistoryIndex < commandHistory.length
-              ? commandHistoryIndex + 1
-              : commandHistory.length
-        )
+          commandHistoryIndex < commandHistory.length
+            ? commandHistoryIndex + 1
+            : commandHistory.length
+        );
       }
-    } 
+    }
     // else if (e.key == "Control") {
     //   console.log(currentDir);
     //   console.log(terminalCommands);
-    // } 
+    // }
     // else {
     //   setCurrentCommand(
     //     (e.target as HTMLDivElement).innerText.replace(/\n/g, "") +
@@ -154,7 +153,9 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
 
   useEffect(() => {
     document.addEventListener("keydown", handleWindowKeyDown);
-    document.getElementById("terminalInput")?.addEventListener("keydown", handleKeyDown);
+    document
+      .getElementById("terminalInput")
+      ?.addEventListener("keydown", handleKeyDown);
     if (!isTerminalLoaded)
       fetch("http://" + ADDRESS + ":5000/api/getPath", { method: "GET" })
         .then((response) => response.json())
@@ -175,7 +176,9 @@ function Terminal({ isFinished, setIsFinished, PID, setPID}: Props) {
 
   return (
     <div>
-      {terminalCommands.array.map((command, index) => createCommand(command, index))}
+      {terminalCommands.array.map((command, index) =>
+        createCommand(command, index)
+      )}
 
       <div
         className="currentCommand"

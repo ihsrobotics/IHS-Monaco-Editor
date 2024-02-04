@@ -1,4 +1,4 @@
-import useArray from "../../../hooks/useArray";
+import useArray from "../../../util/hooks/useArray";
 
 import BeginBranch from "../../../assets/branches/beginBranch.svg";
 import BeginBranchEnd from "../../../assets/branches/beginBranchEnd.svg";
@@ -8,7 +8,7 @@ import Straight from "../../../assets/branches/straight.svg";
 import StraightEnd from "../../../assets/branches/StraightEnd.svg";
 
 function useBranches() {
-  const {array: branchArray, setArray: setBranchArray} = useArray<string>([]);
+  const { array: branchArray, setArray: setBranchArray } = useArray<string>([]);
 
   const addStraightBranch = (
     directoryName: string,
@@ -67,7 +67,7 @@ function useBranches() {
       // change last straight branch to smooth end
       if (newBranchArray[newBranchArray.length - 1] == Straight) {
         newBranchArray[newBranchArray.length - 1] = StraightEnd;
-      } 
+      }
       // change last regular branch to no tail
       else {
         newBranchArray[newBranchArray.length - 1] = BranchEnd;
@@ -76,7 +76,7 @@ function useBranches() {
     setBranchArray(newBranchArray);
   };
 
-  return {branchArray, updateBranches}
+  return { branchArray, updateBranches };
 }
 
 export default useBranches;

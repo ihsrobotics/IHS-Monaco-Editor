@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Toast, { ToastProps } from "./Toast";
+import Toast, { ToastProps } from "../Toast";
 import { AlertColor } from "@mui/material";
 
 export const ToastContext = React.createContext<{
@@ -12,7 +12,11 @@ interface Props {
   children: ReactNode;
 }
 
-export type ToastFunction = (open: boolean, severity: AlertColor, message: string) => void;
+export type ToastFunction = (
+  open: boolean,
+  severity: AlertColor,
+  message: string
+) => void;
 
 function ToastProvider({ children }: Props) {
   const [toast, setToast] = React.useState<ToastProps>({

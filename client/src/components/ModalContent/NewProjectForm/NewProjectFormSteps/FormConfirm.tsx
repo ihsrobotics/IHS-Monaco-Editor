@@ -6,13 +6,16 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { projectProps } from "../useNewProjectForm";
+import { projectProps } from "../hooks/useNewProjectForm";
 import { newFile, newFolder, saveFile } from "../../../../shell";
 import { useContext } from "react";
 import path from "path-browserify";
-import { ToastContext, ToastFunction } from "../../../Toast/ToastContext";
+import {
+  ToastContext,
+  ToastFunction,
+} from "../../../Toast/context/ToastContext";
 import { ADDRESS } from "../../../../address";
-import { LoadFilesContext } from "../../../Files/FilesContext";
+import { LoadFilesContext } from "../../../Files/context/FilesContext";
 
 interface Props {
   prevStep: (arg0?: number) => void;

@@ -20,9 +20,9 @@ import {
   ReloadEditorContext,
 } from "../../App";
 import { saveFile } from "../../shell";
-import { ToastContext } from "../Toast/ToastContext";
+import { ToastContext } from "../Toast/context/ToastContext";
 import FileName from "../Files/FileName";
-import useUserSettingsContext from "../../hooks/useUserSettingsContext";
+import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
 
 interface Props {
   onDragEnd: (arg0: DropResult) => void;
@@ -33,7 +33,7 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
 
   const { userSettings } = useUserSettingsContext();
 
-  const {useToast} = React.useContext(ToastContext);
+  const { useToast } = React.useContext(ToastContext);
 
   const { tabs, setTabs } = React.useContext(FileTabContext);
   const { fileTabValue, setFileTabValue } =
@@ -59,13 +59,18 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     // save editor on close
     if (!tabs[index].editorSaved && userSettings.saveFileOnEditorClose) {
       console.log("save");
-      saveFile(tabs[index].value, tabs[index].editorContent, undefined, useToast);
+      saveFile(
+        tabs[index].value,
+        tabs[index].editorContent,
+        undefined,
+        useToast
+      );
     }
 
     const removedValue = tabs[index].value;
-    setTabs(prevTabs => {
-      return [...prevTabs.slice(0, index), ...prevTabs.slice(index+1)]
-    })
+    setTabs((prevTabs) => {
+      return [...prevTabs.slice(0, index), ...prevTabs.slice(index + 1)];
+    });
 
     // current active tab is not deleted, no need to change the value
     if (fileTabValue !== removedValue) {
@@ -83,7 +88,6 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     }
   };
 
-
   const _renderTabList = (droppableProvided: DroppableProvided) => (
     <TabList
       onChange={handleChange}
@@ -97,7 +101,7 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
           <DraggableTab
             label={
               <>
-                <FileName fileName={tab.label}/>
+                <FileName fileName={tab.label} />
                 <IconButton
                   aria-label="close"
                   sx={{ height: "20px", width: "20px" }}

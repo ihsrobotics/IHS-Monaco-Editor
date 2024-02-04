@@ -1,6 +1,6 @@
 import { Stack, Switch } from "@mui/material";
-import { settingItem } from "../../context/UserSettingsContext";
-import useUserSettingsContext from "../../hooks/useUserSettingsContext";
+import { settingItem } from "./context/UserSettingsContext";
+import useUserSettingsContext from "./hooks/useUserSettingsContext";
 
 interface Props {
   label: string;

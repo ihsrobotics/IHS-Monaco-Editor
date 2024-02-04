@@ -3,7 +3,7 @@ import FormProjectPresets from "./NewProjectFormSteps/FormProjectPresets";
 import FormProjectSource from "./NewProjectFormSteps/FormProjectSource";
 import FormProjectCppOptions from "./NewProjectFormSteps/FormProjectCppOptions";
 import FormConfirm from "./NewProjectFormSteps/FormConfirm";
-import useNewProjectForm from "./useNewProjectForm";
+import useNewProjectForm from "./hooks/useNewProjectForm";
 
 interface Props {
   setModalOpen: (arg0: boolean) => void;

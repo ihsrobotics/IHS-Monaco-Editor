@@ -1,7 +1,7 @@
 import { Typography, FormControl, TextField, Box, Button } from "@mui/material";
 import { getFile, saveFile } from "../../shell";
 import { useContext, useEffect, useState } from "react";
-import { ToastContext, ToastFunction } from "../Toast/ToastContext";
+import { ToastContext, ToastFunction } from "../Toast/context/ToastContext";
 
 interface Props {
   project: string;
@@ -43,24 +43,15 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
         project.split("/").slice(0, 2).join("/") + "/.editor/config.json",
         JSON.stringify(configs)
       );
-      toast(
-        true,
-        "success",
-        "project configs updated",
-      );
+      toast(true, "success", "project configs updated");
       // toast(true, 'success', 'project configs updated');
     } catch (error) {
       console.log(error);
-      toast(
-        true,
-        "error",
-        error as string,
-      );
+      toast(true, "error", error as string);
     }
   };
 
-  const {useToast} = useContext(ToastContext)
-
+  const { useToast } = useContext(ToastContext);
 
   return (
     <>
@@ -86,7 +77,9 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
             name="run command"
           />
         </FormControl>
-      ) : <p>loading...</p> }
+      ) : (
+        <p>loading...</p>
+      )}
 
       <Box
         justifyContent={"space-between"}
@@ -98,7 +91,11 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
         <Button disableRipple variant="contained" onClick={cancel}>
           Cancel
         </Button>
-        <Button disableRipple variant="contained" onClick={() => save(useToast)}>
+        <Button
+          disableRipple
+          variant="contained"
+          onClick={() => save(useToast)}
+        >
           Save
         </Button>
       </Box>

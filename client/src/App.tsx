@@ -9,10 +9,10 @@ import EditorTabs, { tab } from "./components/Editor/EditorTabs";
 import BottomBar from "./components/Terminal/BottomBar";
 import Terminal from "./components/Terminal/Terminal";
 import Theme from "./Theme";
-import LoadFilesProvider from "./components/Files/FilesContext";
+import LoadFilesProvider from "./components/Files/context/FilesContext";
 import ModalProvider from "./components/Modal/context/ModalContext";
-import UserSettingsProvider from "./context/UserSettingsContext";
-import ToastProvider from "./components/Toast/ToastContext";
+import UserSettingsProvider from "./components/ModalContent/UserSettingsForm/context/UserSettingsContext";
+import ToastProvider from "./components/Toast/context/ToastContext";
 
 export const FileTabContext = React.createContext<{
   tabs: tab[];
@@ -54,7 +54,7 @@ function App() {
   return (
     <>
       <Theme>
-          <ToastProvider>
+        <ToastProvider>
           <UserSettingsProvider>
             <FileTabContext.Provider value={{ tabs: tabs, setTabs: setTabs }}>
               <FileTabValueContext.Provider
@@ -71,10 +71,7 @@ function App() {
                 >
                   <LoadFilesProvider>
                     <ModalProvider>
-                      <ToolBar
-                        isFinished={isFinished}
-                        PID={PID}
-                      />
+                      <ToolBar isFinished={isFinished} PID={PID} />
                     </ModalProvider>
 
                     <div className="appContainer">
@@ -126,8 +123,8 @@ function App() {
                 </ReloadEditorContext.Provider>
               </FileTabValueContext.Provider>
             </FileTabContext.Provider>
-            </UserSettingsProvider>
-          </ToastProvider>
+          </UserSettingsProvider>
+        </ToastProvider>
       </Theme>
     </>
   );

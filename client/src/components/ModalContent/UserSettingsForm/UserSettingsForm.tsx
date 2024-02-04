@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import useUserSettingsContext from "../../hooks/useUserSettingsContext";
+import useUserSettingsContext from "./hooks/useUserSettingsContext";
 import UserSettingSwitch from "./UserSettingSwitch";
 
 function UserSettingsForm() {
