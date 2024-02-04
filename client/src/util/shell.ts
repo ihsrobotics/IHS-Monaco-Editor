@@ -1,6 +1,7 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import { ToastFunction } from "../components/Toast/context/ToastContext";
 import { ADDRESS, PORT } from "../env/address";
+import useArray from "./hooks/useArray";
 
 export function rename(
   oldName: string,
@@ -250,15 +251,17 @@ function readShellOutput(
   setPID: React.Dispatch<number>,
   oldTerminalOutput: [string, string, string][],
   newTerminalOutput: [string, string, string],
-  setOutput: React.Dispatch<[string, string, string][]>,
+  updateTerminalOutput: React.Dispatch<
+    SetStateAction<[string, string, string][]>
+  >,
   setCurrentDir: React.Dispatch<string>,
-  ret: string
+  outputBuffer: string
 ) {
   const decodedValue = new TextDecoder().decode(value);
   console.log("decoded value:", decodedValue);
   decodedValue.split("\r\n").forEach((value) => {
-    // this is the passed back PID
     const parsedObject = isValidJSON(value);
+    // this is the passed back PID
     if (parsedObject !== null && parsedObject["pid"] != undefined) {
       console.log("pid found:", parsedObject["pid"]);
       setPID(Number.parseInt(parsedObject["pid"]) + 1);
@@ -266,28 +269,23 @@ function readShellOutput(
     // this is the passed back new path
     else if (parsedObject !== null && parsedObject["path"] != undefined) {
       console.log("path found:", parsedObject["path"]);
-      parsedObject.path !== "invalid"
-        ? setCurrentDir(parsedObject["path"])
-        : null;
-      console.log("set current dir", parsedObject["path"]);
+      if (parsedObject.path !== "invalid") setCurrentDir(parsedObject["path"]);
     }
     // this is regular output
     else if (value !== "") {
       console.log("regular value:", value);
-      ret += value.substring(1, value.length - 1);
-      setOutput([
-        ...oldTerminalOutput.slice(0, oldTerminalOutput.length - 1),
-        [
-          newTerminalOutput[0],
-          newTerminalOutput[1],
-          newTerminalOutput[2] + ret,
-        ],
+      outputBuffer += value.substring(1, value.length - 1);
+
+      updateTerminalOutput([
+        ...oldTerminalOutput,
+        [...(newTerminalOutput.slice(0, 2) as [string, string]), outputBuffer],
       ]);
+
       document.querySelector(".app-bottomBar-content")!.scrollTop =
         document.querySelector(".app-bottomBar-content")!.scrollHeight;
     }
   });
-  return ret;
+  return outputBuffer;
 }
 
 export async function liveShell(
@@ -295,10 +293,9 @@ export async function liveShell(
   cwd: string,
   setPID: React.Dispatch<number>,
   setIsFinished: React.Dispatch<boolean>,
-  oldTerminalOutput: [string, string, string][],
+  terminalOutputArray: ReturnType<typeof useArray<[string, string, string]>>,
   newTerminalOutput: [string, string, string],
-  setOutput: React.Dispatch<[string, string, string][]>,
-  setCurrentDir: React.Dispatch<string>
+  setCurrentDir: React.Dispatch<SetStateAction<string>>
 ) {
   const response = await fetch(
     "http://" + ADDRESS + ":" + PORT + "/api/liveShell",
@@ -309,17 +306,20 @@ export async function liveShell(
     }
   );
   const reader = response.body?.getReader();
-  let ret = "";
+  let output = "";
+
+  const oldTerminalOutput = terminalOutputArray.array;
+
   const { done, value } =
     (await reader?.read()) as ReadableStreamReadResult<Uint8Array>;
-  ret = readShellOutput(
+  output = readShellOutput(
     value,
     setPID,
     oldTerminalOutput,
     newTerminalOutput,
-    setOutput,
+    terminalOutputArray.setArray,
     setCurrentDir,
-    ret
+    output
   );
   while (!done) {
     const { done, value } =
@@ -334,14 +334,14 @@ export async function liveShell(
       }, 100);
       break;
     }
-    ret = readShellOutput(
+    output = readShellOutput(
       value,
       setPID,
       oldTerminalOutput,
       newTerminalOutput,
-      setOutput,
+      terminalOutputArray.setArray,
       setCurrentDir,
-      ret
+      output
     );
   }
 }

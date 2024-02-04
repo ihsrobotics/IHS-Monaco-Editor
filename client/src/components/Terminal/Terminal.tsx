@@ -77,7 +77,6 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
       // handle commands
       if (input.trim().length > 0) {
         console.log("command:", input);
-        // setCommandHistory([...commandHistory, input]);
         commandHistory.push(input);
         setCommandHistoryIndex(commandHistory.length + 1);
         terminalCommands.push([currentDir, input, ""]);
@@ -87,9 +86,8 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
           currentDir,
           setPID,
           setIsFinished,
-          terminalCommands.array,
+          terminalCommands,
           [currentDir, input, ""],
-          terminalCommands.setArray,
           setCurrentDir
         );
       }
@@ -101,23 +99,25 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
 
       // clear the input box
       (e.target as HTMLDivElement).innerText = "";
-      document.querySelector(".app-bottomBar-content")!.scrollTop =
-        document.querySelector(".app-bottomBar-content")!.scrollHeight;
     } else if (e.key == "ArrowUp") {
       e.preventDefault();
+      // if an older command exists
       if (commandHistory.array[commandHistoryIndex - 1]) {
         (e.target as HTMLDivElement).innerText =
           commandHistory.array[commandHistoryIndex - 1];
         setCommandHistoryIndex(commandHistoryIndex - 1);
       }
+      // cache the current command in case the user presses arrow down to go back to most recent command content
       setCurrentCommand((e.target as HTMLDivElement).innerText);
     } else if (e.key == "ArrowDown") {
       e.preventDefault();
+      // there is a more recent command
       if (commandHistory.array[commandHistoryIndex + 1]) {
         (e.target as HTMLDivElement).innerText =
           commandHistory.array[commandHistoryIndex + 1];
         setCommandHistoryIndex(commandHistoryIndex + 1);
       } else {
+        // there isn't a more recent command
         (e.target as HTMLDivElement).innerText = currentCommand;
         setCommandHistoryIndex(
           commandHistoryIndex < commandHistory.length
@@ -129,12 +129,6 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
     // else if (e.key == "Control") {
     //   console.log(currentDir);
     //   console.log(terminalCommands);
-    // }
-    // else {
-    //   setCurrentCommand(
-    //     (e.target as HTMLDivElement).innerText.replace(/\n/g, "") +
-    //       (e.key.length === 1 ? e.key : "")
-    //   );
     // }
   };
   // special control + c behavior
@@ -159,7 +153,9 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
       .getElementById("terminalInput")
       ?.addEventListener("keydown", handleKeyDown);
     if (!isTerminalLoaded)
-      fetch("http://" + ADDRESS + ":"+PORT+"/api/getPath", { method: "GET" })
+      fetch("http://" + ADDRESS + ":" + PORT + "/api/getPath", {
+        method: "GET",
+      })
         .then((response) => response.json())
         .then((data) => {
           setCurrentDir(data["path"]);
