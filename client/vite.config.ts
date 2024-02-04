@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import sourcemaps from "rollup-plugin-sourcemaps";
 import { dependencies } from "./package.json";
 
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
+
 function renderChunks(deps: Record<string, string>) {
   const chunks = {};
   Object.keys(deps).forEach((key) => {
@@ -14,7 +16,7 @@ function renderChunks(deps: Record<string, string>) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), nodePolyfills()],
   build: {
     rollupOptions: {
       onLog(level, log, handler) {
