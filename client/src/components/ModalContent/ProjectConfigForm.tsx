@@ -1,7 +1,8 @@
 import { Typography, FormControl, TextField, Box, Button } from "@mui/material";
 import { getFile, saveFile } from "../../util/shell";
-import { useContext, useEffect, useState } from "react";
-import { ToastContext, ToastFunction } from "../Toast/context/ToastContext";
+import { useEffect, useState } from "react";
+import { ToastFunction } from "../Toast/context/ToastContext";
+import useToastContext from "../Toast/hooks/useToastContext";
 
 interface Props {
   project: string;
@@ -24,7 +25,7 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
         setConfigsLoaded(true);
       });
     }
-  }, []);
+  }, [configsLoaded, project]);
 
   const handleCompileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     configs.compile = e.target.value;
@@ -51,7 +52,7 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
     }
   };
 
-  const { useToast } = useContext(ToastContext);
+  const { useToast } = useToastContext();
 
   return (
     <>

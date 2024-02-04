@@ -10,12 +10,10 @@ import { projectProps } from "../hooks/useNewProjectForm";
 import { newFile, newFolder, saveFile } from "../../../../util/shell";
 import { useContext } from "react";
 import path from "path-browserify";
-import {
-  ToastContext,
-  ToastFunction,
-} from "../../../Toast/context/ToastContext";
+import { ToastFunction } from "../../../Toast/context/ToastContext";
 import { ADDRESS, PORT } from "../../../../env/address";
 import { LoadFilesContext } from "../../../Files/context/FilesContext";
+import useToastContext from "../../../Toast/hooks/useToastContext";
 
 interface Props {
   prevStep: (arg0?: number) => void;
@@ -110,7 +108,7 @@ async function makeNewProject(
 
 function FormConfirm({ prevStep, nextStep, values }: Props) {
   const { loadFiles } = useContext(LoadFilesContext);
-  const { useToast } = useContext(ToastContext);
+  const { useToast } = useToastContext();
 
   const prev = (e: React.MouseEvent) => {
     e.preventDefault();

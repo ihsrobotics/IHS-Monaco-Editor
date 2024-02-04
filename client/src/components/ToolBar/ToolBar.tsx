@@ -17,9 +17,9 @@ import ProjectConfigForm from "../ModalContent/ProjectConfigForm";
 import Info from "../ModalContent/Info";
 import UserSettingsForm from "../ModalContent/UserSettingsForm/UserSettingsForm";
 import ToolBarButton from "./ToolBarButton";
-import { ToastContext } from "../Toast/context/ToastContext";
 import { LoadFilesContext } from "../Files/context/FilesContext";
 import { ModalContext, ModalFunction } from "../Modal/context/ModalContext";
+import useToastContext from "../Toast/hooks/useToastContext";
 // import useModal from "../Modal/useModal";
 
 interface Props {
@@ -33,7 +33,7 @@ function ToolBar({ isFinished, PID }: Props) {
   const { fileTabValue } = useContext(FileTabValueContext);
   const { tabs } = useContext(FileTabContext);
   const tabIndex = tabs.findIndex((tab) => tab.value === fileTabValue);
-  const { useToast } = useContext(ToastContext);
+  const { useToast } = useToastContext();
   const { loadFiles } = useContext(LoadFilesContext);
   const { useModal, setOpen } = useContext(ModalContext);
 

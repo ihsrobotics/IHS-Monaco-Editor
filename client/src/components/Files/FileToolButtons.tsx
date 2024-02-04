@@ -5,8 +5,8 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import Tooltip from "@mui/material/Tooltip";
 import { deleteItem, newFile, newFolder, rename } from "../../util/shell";
 import { useContext } from "react";
-import { ToastContext } from "../Toast/context/ToastContext";
 import { LoadFilesContext } from "./context/FilesContext";
+import useToastContext from "../Toast/hooks/useToastContext";
 
 interface Props {
   fileType: "file" | "folder";
@@ -15,7 +15,7 @@ interface Props {
 }
 
 function FileToolButtons({ fileType, fileName, visible }: Props) {
-  const { useToast } = useContext(ToastContext);
+  const { useToast } = useToastContext();
   const { loadFiles } = useContext(LoadFilesContext);
 
   return (
