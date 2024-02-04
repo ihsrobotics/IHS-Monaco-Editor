@@ -1,19 +1,6 @@
 import React from "react";
-import { ToastFunction } from "./components/Toast/context/ToastContext";
-import { ADDRESS } from "./address";
-
-// export function loadFiles(setProjects: React.Dispatch<object>, setIsFilesLoaded: React.Dispatch<boolean>){
-//   setProjects({});
-//   setIsFilesLoaded(false);
-//   fetch("http://" + ADDRESS + ":5000/api/getFileHierarchy", { method: "GET" })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       setProjects(data);
-//     })
-//     .then(() => {
-//       setIsFilesLoaded(true);
-//   });
-// }
+import { ToastFunction } from "../components/Toast/context/ToastContext";
+import { ADDRESS } from "../env/address";
 
 export function rename(
   oldName: string,

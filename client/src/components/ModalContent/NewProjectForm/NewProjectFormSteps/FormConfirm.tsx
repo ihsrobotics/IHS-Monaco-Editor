@@ -7,14 +7,14 @@ import {
   Typography,
 } from "@mui/material";
 import { projectProps } from "../hooks/useNewProjectForm";
-import { newFile, newFolder, saveFile } from "../../../../shell";
+import { newFile, newFolder, saveFile } from "../../../../util/shell";
 import { useContext } from "react";
 import path from "path-browserify";
 import {
   ToastContext,
   ToastFunction,
 } from "../../../Toast/context/ToastContext";
-import { ADDRESS } from "../../../../address";
+import { ADDRESS } from "../../../../env/address";
 import { LoadFilesContext } from "../../../Files/context/FilesContext";
 
 interface Props {

@@ -19,7 +19,7 @@ import {
   FileTabValueContext,
   ReloadEditorContext,
 } from "../../App";
-import { saveFile } from "../../shell";
+import { saveFile } from "../../util/shell";
 import { ToastContext } from "../Toast/context/ToastContext";
 import FileName from "../Files/FileName";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";

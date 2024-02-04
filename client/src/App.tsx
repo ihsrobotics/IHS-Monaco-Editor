@@ -8,7 +8,7 @@ import ToolBar from "./components/ToolBar/ToolBar";
 import EditorTabs, { tab } from "./components/Editor/EditorTabs";
 import BottomBar from "./components/Terminal/BottomBar";
 import Terminal from "./components/Terminal/Terminal";
-import Theme from "./Theme";
+import Theme from "./styles/Theme";
 import LoadFilesProvider from "./components/Files/context/FilesContext";
 import ModalProvider from "./components/Modal/context/ModalContext";
 import UserSettingsProvider from "./components/ModalContent/UserSettingsForm/context/UserSettingsContext";

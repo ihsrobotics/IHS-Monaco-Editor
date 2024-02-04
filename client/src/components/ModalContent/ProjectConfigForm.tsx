@@ -1,5 +1,5 @@
 import { Typography, FormControl, TextField, Box, Button } from "@mui/material";
-import { getFile, saveFile } from "../../shell";
+import { getFile, saveFile } from "../../util/shell";
 import { useContext, useEffect, useState } from "react";
 import { ToastContext, ToastFunction } from "../Toast/context/ToastContext";
 

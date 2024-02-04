@@ -3,7 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import Tooltip from "@mui/material/Tooltip";
-import { deleteItem, newFile, newFolder, rename } from "../../shell";
+import { deleteItem, newFile, newFolder, rename } from "../../util/shell";
 import { useContext } from "react";
 import { ToastContext } from "../Toast/context/ToastContext";
 import { LoadFilesContext } from "./context/FilesContext";

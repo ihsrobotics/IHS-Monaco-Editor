@@ -12,7 +12,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import { useContext } from "react";
 import NewProjectForm from "../ModalContent/NewProjectForm/NewProjectForm";
 import { FileTabContext, FileTabValueContext } from "../../App";
-import { compileProject, keyInt, runProject, saveFile } from "../../shell";
+import { compileProject, keyInt, runProject, saveFile } from "../../util/shell";
 import ProjectConfigForm from "../ModalContent/ProjectConfigForm";
 import Info from "../ModalContent/Info";
 import UserSettingsForm from "../ModalContent/UserSettingsForm/UserSettingsForm";

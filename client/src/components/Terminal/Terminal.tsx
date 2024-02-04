@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import "./styles/Terminal.css";
 import path from "path-browserify";
-import { keyInt, liveShell } from "../../shell";
-import { ADDRESS } from "../../address";
+import { keyInt, liveShell } from "../../util/shell";
+import { ADDRESS } from "../../env/address";
 import useArray from "../../util/hooks/useArray";
 
 interface Props {
