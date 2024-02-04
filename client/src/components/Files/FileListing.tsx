@@ -11,7 +11,6 @@ type DirectoryObject = {[key: string]: {type: string, name: string} | DirectoryO
 
 
 function FileListing() {
-  // const { showEditorConfigFolder } = useContext(userSettingsContext);
   const { userSettings } = useUserSettingsContext();
   const [fileList, setFileList] = useState<MultiDimensionalArray>([]);
 
@@ -20,23 +19,27 @@ function FileListing() {
 
   const unpackFiles = useCallback( (directory: DirectoryObject, path = ".", depth = 0): MultiDimensionalArray => {
     // files go at the end of the current directory
-    const files = [];
+    const filesBuffer = [];
     const ret = [];
     for (const item in directory) {
       if (
         directory[item]["type"] === "directory" &&
         (!item.includes(".editor") || userSettings.showEditorConfigFolder)
       ) {
+        // folder
         ret.push(["directory", path + "/" + item, depth]);
+        // recursively unpack items inside folder object
         ret.push(unpackFiles((directory[item] as DirectoryObject), path + "/" + item, depth + 1));
       } else if (
         directory[item]["name"] !== undefined &&
         (!(directory[item]["name"] as string).includes(".editor") || userSettings.showEditorConfigFolder)
       ) {
-        files.push(["file", path + "/" + directory[item]["name"], depth]);
+        // file
+        filesBuffer.push(["file", path + "/" + directory[item]["name"], depth]);
       }
     }
-    ret.push(...files);
+    // add files to the end of current directory
+    ret.push(...filesBuffer);
     return ret;
   }, [userSettings])
 
@@ -73,7 +76,7 @@ function FileListing() {
       );
     }
     if (is2DArray(files)) {
-      // this is a child directory
+      // folder
       return (
         <Directory
           key={index}
@@ -86,8 +89,10 @@ function FileListing() {
         </Directory>
       );
     } else if (files[0] === "file") {
+      // regular file
       return <FileComponent key={index} name={files[1] as string} depth={files[2] as number} />;
     } else {
+      // folder header
       uniqueParentDirectoryName = files[1].toString();
       parentDirectoryDepth = files[2] as number;
     }
