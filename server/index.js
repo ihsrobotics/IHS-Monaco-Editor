@@ -7,7 +7,7 @@ const cors = require("cors");
 const os = require("os");
 
 const app = express();
-const port = 5000;
+const PORT = 5000;
 app.use(express.json());
 app.use(cors());
 
@@ -268,8 +268,8 @@ app.post("/api/kill", (req, res) => {
   }, 200);
 });
 
-app.listen(port, () => {
-  console.log("Server started on port", port);
+app.listen(PORT, () => {
+  console.log("Server started on port", PORT);
 });
 
 // npm run dev

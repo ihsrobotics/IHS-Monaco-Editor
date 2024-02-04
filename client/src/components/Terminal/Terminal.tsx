@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./styles/Terminal.css";
 import path from "path-browserify";
 import { keyInt, liveShell } from "../../util/shell";
-import { ADDRESS } from "../../env/address";
+import { ADDRESS, PORT } from "../../env/address";
 import useArray from "../../util/hooks/useArray";
 
 interface Props {
@@ -13,14 +13,16 @@ interface Props {
 }
 
 function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
+  // [path, command, response]
   const terminalCommands = useArray<[string, string, string]>([]);
+
   const [home, setHome] = useState("");
   const [currentDir, setCurrentDir] = useState("");
   const [user, setUser] = useState("");
 
   const [currentCommand, setCurrentCommand] = useState<string>("");
   const [isTerminalLoaded, setIsTerminalLoaded] = useState(false);
-  // const [commandHistory, setCommandHistory] = useState<string[]>([]);
+
   const commandHistory = useArray<string>([]);
   const [commandHistoryIndex, setCommandHistoryIndex] = useState(0);
 
@@ -157,7 +159,7 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
       .getElementById("terminalInput")
       ?.addEventListener("keydown", handleKeyDown);
     if (!isTerminalLoaded)
-      fetch("http://" + ADDRESS + ":5000/api/getPath", { method: "GET" })
+      fetch("http://" + ADDRESS + ":"+PORT+"/api/getPath", { method: "GET" })
         .then((response) => response.json())
         .then((data) => {
           setCurrentDir(data["path"]);

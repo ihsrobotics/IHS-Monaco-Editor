@@ -3,8 +3,8 @@ import { useState } from "react";
 function useArray<T>(defaultValue: T[]){
     const [array, setArray] = useState(defaultValue);
 
-    async function push(element: T){
-        await setArray(a => [...a, element]);
+    function push(element: T){
+        setArray(a => [...a, element]);
     }
 
     function filter(callback: () => boolean){
