@@ -73,7 +73,6 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
 
       // handle commands
       if (input.trim().length > 0) {
-        console.log("command:", input);
         commandHistory.push(input);
         setCommandHistoryIndex(commandHistory.length + 1);
         terminalCommands.push([currentDir, input, ""]);
@@ -134,12 +133,10 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
     // keyboard interrupt
     if (e.ctrlKey && e.code === "KeyC" && !isFinished) {
       e.preventDefault();
-      console.log("keyint", PID);
       keyInt(PID);
     }
     // alternate copy
     else if (e.shiftKey && e.ctrlKey && e.code === "KeyC") {
-      console.log("shift copy");
       e.preventDefault();
       copySelectedText();
     }

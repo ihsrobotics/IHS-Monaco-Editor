@@ -24,7 +24,6 @@ function LoadFilesProvider({ children }: Props) {
   const [projects, setProjects] = useState<object>({});
 
   const loadFiles = useCallback(() => {
-    console.log("load files called");
     setProjects({});
     setIsFilesLoaded(false);
     fetch(`http://${ADDRESS}:${PORT}/api/getFileHierarchy`, {
@@ -32,13 +31,12 @@ function LoadFilesProvider({ children }: Props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setProjects(data);
       })
       .then(() => {
         setIsFilesLoaded(true);
       })
-      .catch((err) => console.log("error loading files", err));
+      .catch((err) => console.error("error loading files", err));
   }, []);
 
   return (

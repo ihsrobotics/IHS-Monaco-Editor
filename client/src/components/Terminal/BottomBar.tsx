@@ -23,7 +23,6 @@ function BottomBar({ children, width, isFinished }: Props) {
   const resize = React.useCallback(
     (mouseMoveEvent: globalThis.MouseEvent) => {
       if (isResizing) {
-        console.log(height);
         setHeight(
           bottomBarRef.current === null
             ? 0

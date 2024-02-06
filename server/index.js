@@ -15,7 +15,6 @@ app.use(cors());
 const DIRECTORY_PATH = path.join(process.env.HOME, "Documents", "IME_files");
 
 if (!fsSync.existsSync(DIRECTORY_PATH)) {
-  console.log("project dir doesn't exist");
   fsSync.mkdirSync(DIRECTORY_PATH, { recursive: true });
 }
 
@@ -101,10 +100,9 @@ app.post("/api/shell", (req, res) => {
   if (!command) {
     return res.status(400).json({ error: "command parameter is required" });
   }
-  console.log(command);
   exec(command, { cwd: DIRECTORY_PATH }, (error, output) => {
     if (error) {
-      console.log(error);
+      console.error(error);
       return res.status(500).json({ error: error });
     } else {
       res.status(200).send("shell command handled successfully");
@@ -114,8 +112,6 @@ app.post("/api/shell", (req, res) => {
 
 app.post("/api/saveFile", async (req, res) => {
   const { fileName, content } = req.body;
-  console.log(fileName);
-  console.log(content);
   if (!fileName || !content) {
     return res
       .status(400)
@@ -205,10 +201,8 @@ app.post("/api/liveShell", (req, res) => {
     { stdio: "pipe", shell: true, cwd: cwd }
   );
   res.write(JSON.stringify({ pid: childProcess.pid }) + "\r\n");
-  console.log("pid: ", childProcess.pid);
   childProcess.stdout.on("data", (data) => {
     const formattedData = data.toString();
-    console.log("output:", formattedData);
 
     // path data
     if (formattedData.includes("__PATH__")) {
@@ -228,8 +222,6 @@ app.post("/api/liveShell", (req, res) => {
   });
   childProcess.stderr.on("data", (data) => {
     const formattedData = data.toString();
-    console.log("error:", data.toString());
-
     if (
       formattedData.includes("cd:") &&
       formattedData.includes("No such file or directory")
@@ -255,7 +247,6 @@ function isProcess(pid) {
 
 app.post("/api/kill", (req, res) => {
   const { pid } = req.body;
-  console.log("pid to kill", pid);
   if (isProcess(Number.parseInt(pid) + 1))
     process.kill(Number.parseInt(pid) + 1, "SIGINT");
   setTimeout(() => {

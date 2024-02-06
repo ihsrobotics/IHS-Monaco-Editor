@@ -50,7 +50,6 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     e.stopPropagation();
     // save editor on close
     if (!tabs[index].editorSaved && userSettings.saveFileOnEditorClose) {
-      console.log("save");
       saveFile(
         tabs[index].value,
         tabs[index].editorContent,

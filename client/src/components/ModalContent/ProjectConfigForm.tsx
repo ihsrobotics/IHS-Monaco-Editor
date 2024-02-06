@@ -47,7 +47,7 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
       toast(true, "success", "project configs updated");
       // toast(true, 'success', 'project configs updated');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast(true, "error", error as string);
     }
   };

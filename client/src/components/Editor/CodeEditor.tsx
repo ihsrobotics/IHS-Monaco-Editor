@@ -44,7 +44,7 @@ function CodeEditor({ fileName, content }: Props) {
           );
           setIsThemeLoaded(true);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
 
     return () => {
       if (editorRef.current) {

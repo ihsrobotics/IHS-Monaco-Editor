@@ -28,7 +28,7 @@ export function rename(
       loadFiles();
     })
     .catch((error) => {
-      console.log("Error:", error);
+      console.error(error);
       toast(true, "error", error);
     });
 }
@@ -55,7 +55,7 @@ export function deleteItem(
       loadFiles();
     })
     .catch((error) => {
-      console.log("Error:", error);
+      console.error(error);
       toast(true, "error", error);
     });
 }
@@ -85,7 +85,7 @@ export async function newFile(
       if (loadFiles) loadFiles();
     })
     .catch((error) => {
-      console.log("Error:", error);
+      console.error(error);
       if (toast) toast(true, "error", error);
       throw error;
     });
@@ -123,7 +123,7 @@ export async function newFolder(
       if (loadFiles) loadFiles();
     })
     .catch((error) => {
-      console.log("Error:", error);
+      console.error(error);
       if (toast) toast(true, "error", error);
       throw error;
     });
@@ -144,7 +144,6 @@ export async function saveFile(
   setIsFinished?: React.Dispatch<boolean>,
   toast?: ToastFunction
 ) {
-  console.log(fileName);
   await fetch(`http://${ADDRESS}:${PORT}/api/saveFile`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -163,7 +162,7 @@ export async function saveFile(
       if (setIsFinished) setIsFinished(false);
     })
     .catch((error) => {
-      console.log("Error:", error);
+      console.error(error);
       if (toast) toast(true, "error", error);
       throw error;
     });
@@ -255,7 +254,6 @@ function readShellOutput(
   outputBuffer: string
 ) {
   const decodedValue = new TextDecoder().decode(value);
-  console.log("decoded value:", decodedValue);
   decodedValue.split("\r\n").forEach((value) => {
     const parsedObject = isValidJSON(value);
     // this is the passed back PID

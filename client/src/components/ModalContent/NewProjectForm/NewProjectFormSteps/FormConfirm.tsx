@@ -101,7 +101,7 @@ async function makeNewProject(
     toast(true, "success", projectName + " created successfully");
     loadFiles();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     toast(true, "error", error as string);
   }
 }
@@ -123,7 +123,6 @@ function FormConfirm({ prevStep, nextStep, values }: Props) {
     e.preventDefault();
     makeNewProject(values, useToast, loadFiles);
     nextStep();
-    console.log(values);
   };
 
   return (
