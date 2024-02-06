@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/Terminal.css";
 import path from "path-browserify";
 import { keyInt, liveShell } from "../../util/shell";
@@ -85,7 +85,8 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
           setIsFinished,
           terminalCommands,
           [currentDir, input, ""],
-          setCurrentDir
+          setCurrentDir,
+          terminalInputRef
         );
       }
 
@@ -158,6 +159,8 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
     };
   });
 
+  const terminalInputRef = useRef<HTMLDivElement>(null);
+
   return (
     <div>
       {terminalCommands.array.map((command, index) =>
@@ -166,11 +169,16 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
 
       <div
         className="currentCommand"
-        onClick={() => document.getElementById("terminalInput")?.focus()}
+        onClick={() => terminalInputRef.current?.focus()}
         style={{ visibility: isFinished ? "visible" : "hidden" }}
       >
         {createPrompt(currentDir)}
-        <div contentEditable="true" id="terminalInput" spellCheck={"false"} />
+        <div
+          contentEditable="true"
+          id="terminalInput"
+          spellCheck={"false"}
+          ref={terminalInputRef}
+        />
       </div>
     </div>
   );

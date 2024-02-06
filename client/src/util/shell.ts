@@ -292,7 +292,8 @@ export async function liveShell(
   setIsFinished: React.Dispatch<boolean>,
   terminalOutputArray: ReturnType<typeof useArray<[string, string, string]>>,
   newTerminalOutput: [string, string, string],
-  setCurrentDir: React.Dispatch<SetStateAction<string>>
+  setCurrentDir: React.Dispatch<SetStateAction<string>>,
+  terminalInputRef: React.RefObject<HTMLDivElement>
 ) {
   const response = await fetch(`http://${ADDRESS}:${PORT}/api/liveShell`, {
     method: "POST",
@@ -324,7 +325,7 @@ export async function liveShell(
       setIsFinished(true);
       // wait for the rerender to finish before setting the focus
       setTimeout(() => {
-        document.getElementById("terminalInput")?.focus();
+        terminalInputRef.current?.focus();
       }, 100);
       break;
     }
