@@ -5,6 +5,7 @@ const path = require("path");
 const { exec, spawn } = require("child_process");
 const cors = require("cors");
 const os = require("os");
+const archiver = require("archiver");
 
 const app = express();
 const PORT = 5000;
@@ -257,6 +258,24 @@ app.post("/api/kill", (req, res) => {
     if (isProcess(Number.parseInt(pid) + 1))
       process.kill(Number.parseInt(pid) + 1, "SIGTERM");
   }, 200);
+});
+
+app.post("/api/downloadProject", (req, res) => {
+  const { projectName } = req.body;
+  if (!projectName) {
+    return res.status(400).json({ error: "Folder name is required" });
+  }
+  const folderPath = path.join(DIRECTORY_PATH, projectName);
+  if (!fsSync.existsSync(folderPath)) {
+    return res.status(404).json({ error: "Folder not found" });
+  }
+
+  const archive = archiver("zip", { zlib: { level: 9 } });
+
+  archive.pipe(res);
+  archive.directory(folderPath, false);
+  archive.finalize();
+  res.attachment(`${projectName}.zip`);
 });
 
 app.listen(PORT, () => {
