@@ -14,11 +14,6 @@ import Tab from "@mui/material/Tab";
 import Stack from "@mui/material/Stack";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import {
-  // FileTabContext,
-  // FileTabValueContext,
-  ReloadEditorContext,
-} from "../../App";
 import { saveFile } from "../../util/shell";
 import FileName from "../Files/FileName";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
@@ -35,11 +30,10 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
   const { useToast } = useToastContext();
 
   const {
-    editorTabs: { array: tabs, remove: removeTab }, selectedTabValue, setSelectedTabValue
+    editorTabs: { array: tabs, remove: removeTab },
+    selectedTabValue,
+    setSelectedTabValue,
   } = useEditorTabsContext();
-
-  const { reloadEditorFlag, setReloadEditorFlag } =
-    React.useContext(ReloadEditorContext);
 
   const handleChange = (
     _event: React.SyntheticEvent<Element, Event>,
@@ -48,8 +42,6 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     if (!tabs.some((tab) => tab.value === newValue)) return;
     setSelectedTabValue(newValue);
   };
-
-  React.useEffect(() => {}, [reloadEditorFlag]);
 
   const handleClickClose = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -68,22 +60,18 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     }
 
     const removedValue = tabs[index].value;
-    removeTab(index);
 
-    // current active tab is not deleted, no need to change the value
-    if (selectedTabValue !== removedValue) {
-      // must trigger a reload but can't use the value state hook because there is no new value
-      setReloadEditorFlag(!reloadEditorFlag);
-      return;
+    if (selectedTabValue === removedValue) {
+      if (index + 1 < tabs.length) {
+        setSelectedTabValue(tabs[index + 1].value);
+      } else if (tabs.length !== 0) {
+        setSelectedTabValue(tabs[0].value);
+      } else {
+        setSelectedTabValue("");
+      }
     }
-    // current active tab is deleted, open an adjacent one or the first one
-    if (index < tabs.length) {
-      setSelectedTabValue(tabs[index].value);
-    } else if (tabs.length !== 0) {
-      setSelectedTabValue(tabs[0].value);
-    } else {
-      setSelectedTabValue("nan");
-    }
+
+    removeTab(index);
   };
 
   const _renderTabList = (droppableProvided: DroppableProvided) => (

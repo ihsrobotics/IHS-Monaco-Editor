@@ -2,12 +2,11 @@ import loadable from "@loadable/component";
 const Editor = loadable(() => import("@monaco-editor/react"));
 import loader from "@monaco-editor/loader";
 import { editor } from "monaco-editor";
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import { Doc } from "yjs";
 import { WebrtcProvider } from "y-webrtc";
 import { MonacoBinding } from "y-monaco";
 import { useState, useEffect } from "react";
-import { ReloadEditorContext } from "../../App";
 import * as githubDark from "../../assets/github-dark.json";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
 import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
@@ -58,10 +57,6 @@ function CodeEditor({ fileName, content }: Props) {
       }
     };
   }, []);
-
-  const { reloadEditorFlag } = useContext(ReloadEditorContext);
-
-  useEffect(() => {}, [reloadEditorFlag]);
 
   const [fileLoaded, setFileLoaded] = useState(false);
 
