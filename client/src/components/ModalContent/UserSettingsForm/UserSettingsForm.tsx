@@ -17,6 +17,11 @@ function UserSettingsForm() {
         }}
       >
         <UserSettingSwitch
+          label="Button Ripple"
+          checked={userSettings.buttonRipple}
+          item="buttonRipple"
+        />
+        <UserSettingSwitch
           label="Dark Theme"
           checked={true}
           item="editorTheme"

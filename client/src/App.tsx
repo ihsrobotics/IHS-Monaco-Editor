@@ -23,9 +23,9 @@ function App() {
 
   return (
     <>
-      <Theme>
-        <ToastProvider>
-          <UserSettingsProvider>
+      <UserSettingsProvider>
+        <Theme>
+          <ToastProvider>
             <EditorTabsProvider>
               <LoadFilesProvider>
                 <ModalProvider>
@@ -79,9 +79,9 @@ function App() {
                 </div>
               </LoadFilesProvider>
             </EditorTabsProvider>
-          </UserSettingsProvider>
-        </ToastProvider>
-      </Theme>
+          </ToastProvider>
+        </Theme>
+      </UserSettingsProvider>
     </>
   );
 }

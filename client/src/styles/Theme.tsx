@@ -1,8 +1,15 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { ReactNode } from "react";
+import useUserSettingsContext from "../components/ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
 
-const THEME = createTheme({
+interface Props {
+  children: ReactNode;
+}
+
+export default function Theme({ children }: Props) {
+  const { userSettings } = useUserSettingsContext();
+  const THEME = createTheme({
     typography: {
       fontFamily: [
         "system-ui",
@@ -48,7 +55,7 @@ const THEME = createTheme({
     components: {
       MuiButtonBase: {
         defaultProps: {
-          disableRipple: true,
+          disableRipple: !userSettings.buttonRipple,
         },
       },
       MuiTab: {
@@ -59,15 +66,5 @@ const THEME = createTheme({
     },
   });
 
-
-interface Props{
-  children: ReactNode;
-}
-
-export default function Theme({children}: Props){
-  return (
-  <ThemeProvider theme={THEME}>
-    {children}
-  </ThemeProvider>
-  )
+  return <ThemeProvider theme={THEME}>{children}</ThemeProvider>;
 }
