@@ -19,7 +19,7 @@ function useTerminalUser() {
           setUser(data["user"]);
           setIsTerminalLoaded(true);
         });
-  });
+  }, [isTerminalLoaded]);
 
   return { user, home, currentDir, setCurrentDir };
 }

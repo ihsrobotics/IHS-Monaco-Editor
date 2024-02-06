@@ -7,15 +7,15 @@ import { Doc } from "yjs";
 import { WebrtcProvider } from "y-webrtc";
 import { MonacoBinding } from "y-monaco";
 import { useState, useEffect } from "react";
-import { FileTabContext, ReloadEditorContext } from "../../App";
+import { ReloadEditorContext } from "../../App";
 import * as githubDark from "../../assets/github-dark.json";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
+import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
 
 interface Props {
   fileName: string;
   content: Promise<string>;
 }
-
 
 function CodeEditor({ fileName, content }: Props) {
   const { userSettings } = useUserSettingsContext();
@@ -23,7 +23,9 @@ function CodeEditor({ fileName, content }: Props) {
   const fileExtension: string =
     fileName.split(".").length > 1 ? fileName.split(".").pop()! : "";
 
-  const { tabs, setTabs } = useContext(FileTabContext);
+  const {
+    editorTabs: { array: tabs, update: updateTab },
+  } = useEditorTabsContext();
   const index = tabs.findIndex((tab) => tab.value === fileName);
 
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
@@ -103,10 +105,10 @@ function CodeEditor({ fileName, content }: Props) {
 
   function handleChange() {
     if (editorRef.current == undefined || !fileLoaded) return;
-    setTabs((prevTabs) => {
-      prevTabs[index].editorContent = editorRef.current!.getValue();
-      prevTabs[index].editorSaved = false;
-      return [...prevTabs];
+    updateTab(index, {
+      ...tabs[index],
+      editorContent: editorRef.current.getValue(),
+      editorSaved: false,
     });
   }
 

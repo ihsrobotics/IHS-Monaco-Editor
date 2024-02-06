@@ -1,7 +1,7 @@
-import { ReactNode, useContext } from "react";
+import { ReactNode } from "react";
 import DraggableTabsList from "./DraggableTabsList";
 import { DropResult } from "@hello-pangea/dnd";
-import { FileTabContext } from "../../App";
+import useEditorTabsContext from "./hooks/useEditorTabsContext";
 
 export type tab = {
   id: string;
@@ -13,7 +13,9 @@ export type tab = {
 };
 
 function EditorTabs() {
-  const { tabs, setTabs } = useContext(FileTabContext);
+  const {
+    editorTabs: { array: tabs, setArray: setTabs },
+  } = useEditorTabsContext();
 
   const onDragEnd = (result: DropResult) => {
     if (result == null || result.destination == null) return;

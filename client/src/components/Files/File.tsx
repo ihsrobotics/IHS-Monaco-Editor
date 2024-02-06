@@ -1,18 +1,19 @@
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 import BranchExtension from "../../assets/branches/branchExtension.svg";
 import { getFile } from "../../util/shell";
 
-import { FileTabContext, FileTabValueContext } from "../../App";
+// import { FileTabContext, FileTabValueContext } from "../../App";
 import CodeEditor from "../Editor/CodeEditor";
 import FileName from "./FileName";
 import FileToolButtons from "./FileToolButtons";
+import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
 
 interface Props {
   name: string;
   depth: number;
 }
-// name conflict with some random thing
+// name conflict with some function in eslint
 function FileComponent({ name, depth }: Props) {
   const [isHovered, setIsHovered] = useState(false);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
@@ -49,13 +50,12 @@ function FileComponent({ name, depth }: Props) {
     };
   }, []);
 
-  const { tabs } = useContext(FileTabContext);
-  const { setFileTabValue } = useContext(FileTabValueContext);
+  const { editorTabs: {array: tabs}, setSelectedTabValue } = useEditorTabsContext();
 
   const handleClick = async () => {
     // this file is already open
     if (tabs.some((tab) => tab.value === name)) {
-      setFileTabValue(name);
+      setSelectedTabValue(name);
       return;
     }
 
@@ -67,7 +67,7 @@ function FileComponent({ name, depth }: Props) {
       editorContent: "",
       editorSaved: true,
     });
-    setFileTabValue(name);
+    setSelectedTabValue(name);
   };
 
   return (

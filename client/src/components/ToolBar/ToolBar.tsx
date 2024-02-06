@@ -11,7 +11,6 @@ import StopIcon from "@mui/icons-material/Stop";
 import InfoIcon from "@mui/icons-material/Info";
 import { useContext } from "react";
 import NewProjectForm from "../ModalContent/NewProjectForm/NewProjectForm";
-import { FileTabContext, FileTabValueContext } from "../../App";
 import { compileProject, keyInt, runProject, saveFile } from "../../util/shell";
 import ProjectConfigForm from "../ModalContent/ProjectConfigForm";
 import Info from "../ModalContent/Info";
@@ -20,19 +19,17 @@ import ToolBarButton from "./ToolBarButton";
 import { LoadFilesContext } from "../Files/context/FilesContext";
 import { ModalContext, ModalFunction } from "../Modal/context/ModalContext";
 import useToastContext from "../Toast/hooks/useToastContext";
-// import useModal from "../Modal/useModal";
+import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
 
 interface Props {
-  // setModalOpen: (arg0: boolean) => void;
-  // setModalChildren: (arg0: ReactNode) => void;
   isFinished: boolean;
   PID: number | undefined;
 }
 
 function ToolBar({ isFinished, PID }: Props) {
-  const { fileTabValue } = useContext(FileTabValueContext);
-  const { tabs } = useContext(FileTabContext);
-  const tabIndex = tabs.findIndex((tab) => tab.value === fileTabValue);
+  const { editorTabs: {array: tabs}, selectedTabValue } = useEditorTabsContext();
+
+  const tabIndex = tabs.findIndex((tab) => tab.value === selectedTabValue);
   const { useToast } = useToastContext();
   const { loadFiles } = useContext(LoadFilesContext);
   const { useModal, setOpen } = useContext(ModalContext);
@@ -43,7 +40,7 @@ function ToolBar({ isFinished, PID }: Props) {
 
   const handleClickSave = async () => {
     await saveFile(
-      fileTabValue,
+      selectedTabValue,
       tabs[tabIndex].editorContent,
       undefined,
       useToast
@@ -52,13 +49,13 @@ function ToolBar({ isFinished, PID }: Props) {
   };
 
   const handleClickCompile = async () => {
-    await saveFile(fileTabValue, tabs[tabIndex].editorContent, undefined);
+    await saveFile(selectedTabValue, tabs[tabIndex].editorContent, undefined);
     tabs[tabIndex].editorSaved = true;
-    compileProject(fileTabValue, useToast);
+    compileProject(selectedTabValue, useToast);
   };
 
   const handleClickRun = () => {
-    runProject(fileTabValue, useToast);
+    runProject(selectedTabValue, useToast);
   };
 
   const handleClickStop = () => {
@@ -66,16 +63,10 @@ function ToolBar({ isFinished, PID }: Props) {
   };
 
   const handleClickConfig = (modal: ModalFunction) => {
-    // setModalChildren(
-    //   <ProjectConfigForm project={fileTabValue} setModalOpen={setOpen} />
-    // );
-    // setModalOpen(true);
-    modal(<ProjectConfigForm project={fileTabValue} setModalOpen={setOpen} />);
+    modal(<ProjectConfigForm project={selectedTabValue} setModalOpen={setOpen} />);
   };
 
   const handleClickSettings = (modal: ModalFunction) => {
-    // setModalChildren(<UserSettingsForm />);
-    // setModalOpen(true);
     modal(<UserSettingsForm />);
   };
 
@@ -95,8 +86,6 @@ function ToolBar({ isFinished, PID }: Props) {
           variant="outlined"
           startIcon={<AddIcon />}
           onClick={() => {
-            // setModalChildren(<NewProjectForm setModalOpen={setModalOpen} />);
-            // setModalOpen(true);
             handleClickNewProject(useModal);
           }}
         >

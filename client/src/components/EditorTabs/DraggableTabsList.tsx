@@ -15,29 +15,29 @@ import Stack from "@mui/material/Stack";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
-  FileTabContext,
-  FileTabValueContext,
+  // FileTabContext,
+  // FileTabValueContext,
   ReloadEditorContext,
 } from "../../App";
 import { saveFile } from "../../util/shell";
 import FileName from "../Files/FileName";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
 import useToastContext from "../Toast/hooks/useToastContext";
+import useEditorTabsContext from "./hooks/useEditorTabsContext";
 
 interface Props {
   onDragEnd: (arg0: DropResult) => void;
 }
 
 export default function DraggableTabsList({ onDragEnd }: Props) {
-  // const { saveFileOnEditorClose } = React.useContext(userSettingsContext);
-
   const { userSettings } = useUserSettingsContext();
 
   const { useToast } = useToastContext();
 
-  const { tabs, setTabs } = React.useContext(FileTabContext);
-  const { fileTabValue, setFileTabValue } =
-    React.useContext(FileTabValueContext);
+  const {
+    editorTabs: { array: tabs, remove: removeTab }, selectedTabValue, setSelectedTabValue
+  } = useEditorTabsContext();
+
   const { reloadEditorFlag, setReloadEditorFlag } =
     React.useContext(ReloadEditorContext);
 
@@ -46,7 +46,7 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     newValue: string
   ) => {
     if (!tabs.some((tab) => tab.value === newValue)) return;
-    setFileTabValue(newValue);
+    setSelectedTabValue(newValue);
   };
 
   React.useEffect(() => {}, [reloadEditorFlag]);
@@ -68,23 +68,21 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     }
 
     const removedValue = tabs[index].value;
-    setTabs((prevTabs) => {
-      return [...prevTabs.slice(0, index), ...prevTabs.slice(index + 1)];
-    });
+    removeTab(index);
 
     // current active tab is not deleted, no need to change the value
-    if (fileTabValue !== removedValue) {
+    if (selectedTabValue !== removedValue) {
       // must trigger a reload but can't use the value state hook because there is no new value
       setReloadEditorFlag(!reloadEditorFlag);
       return;
     }
     // current active tab is deleted, open an adjacent one or the first one
     if (index < tabs.length) {
-      setFileTabValue(tabs[index].value);
+      setSelectedTabValue(tabs[index].value);
     } else if (tabs.length !== 0) {
-      setFileTabValue(tabs[0].value);
+      setSelectedTabValue(tabs[0].value);
     } else {
-      setFileTabValue("nan");
+      setSelectedTabValue("nan");
     }
   };
 
@@ -146,7 +144,7 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
 
   return (
     <Box sx={{ width: "100%", ml: "-1px", height: "30px" }}>
-      <TabContext value={fileTabValue}>
+      <TabContext value={selectedTabValue}>
         <Box>
           <Stack direction="column">{_renderTabListWrappedInDroppable()}</Stack>
         </Box>
