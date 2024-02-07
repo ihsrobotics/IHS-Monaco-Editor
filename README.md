@@ -97,6 +97,11 @@ Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
 
 - Complete refactor of source code for easier development and maintenance
 
+### Version 1.3.0
+
+- Download project button
+- MUI button ripple setting
+
 ### Future Plans
 
 - Download project button
