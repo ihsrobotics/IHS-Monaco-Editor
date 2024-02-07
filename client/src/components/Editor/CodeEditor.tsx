@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import * as githubDark from "../../assets/github-dark.json";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
 import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
+import useToastContext from "../Toast/hooks/useToastContext";
 
 interface Props {
   fileName: string;
@@ -18,6 +19,7 @@ interface Props {
 
 function CodeEditor({ fileName, content }: Props) {
   const { userSettings } = useUserSettingsContext();
+  const { toast } = useToastContext();
 
   const fileExtension: string =
     fileName.split(".").length > 1 ? fileName.split(".").pop()! : "";
@@ -44,11 +46,11 @@ function CodeEditor({ fileName, content }: Props) {
           );
           setIsThemeLoaded(true);
         })
-        .catch((error) => console.error(error));
+        .catch((error) => toast.error(error));
 
     return () => {
       if (editorRef.current) {
-        console.log("clean up");
+        // console.log("clean up");
         editorRef.current.dispose();
         doc.destroy();
         provider.disconnect();

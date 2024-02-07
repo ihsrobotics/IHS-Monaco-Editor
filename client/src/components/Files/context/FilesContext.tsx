@@ -1,5 +1,6 @@
 import React, { ReactNode, useCallback, useState } from "react";
 import { ADDRESS, PORT } from "../../../env/address";
+import useToastContext from "../../Toast/hooks/useToastContext";
 
 export const LoadFilesContext = React.createContext<{
   isFilesLoaded: boolean;
@@ -20,6 +21,7 @@ interface Props {
 }
 
 function LoadFilesProvider({ children }: Props) {
+  const {toast} = useToastContext();
   const [isFilesLoaded, setIsFilesLoaded] = useState<boolean>(false);
   const [projects, setProjects] = useState<object>({});
 
@@ -36,7 +38,8 @@ function LoadFilesProvider({ children }: Props) {
       .then(() => {
         setIsFilesLoaded(true);
       })
-      .catch((err) => console.error("error loading files", err));
+      .catch((error) => toast.error("error loading files " + error));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
