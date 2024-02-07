@@ -1,7 +1,6 @@
 import { Typography, FormControl, TextField, Box, Button } from "@mui/material";
 import { getFile, saveFile } from "../../util/shell";
 import { useEffect, useState } from "react";
-import { ToastFunction } from "../Toast/context/ToastContext";
 import useToastContext from "../Toast/hooks/useToastContext";
 
 interface Props {
@@ -10,6 +9,7 @@ interface Props {
 }
 
 function ProjectConfigForm({ project, setModalOpen }: Props) {
+  const { toast } = useToastContext();
   const [configs, setConfigs] = useState<{ compile: string; run: string }>({
     compile: "",
     run: "",
@@ -37,22 +37,18 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
   const cancel = () => {
     setModalOpen(false);
   };
-  const save = (toast: ToastFunction) => {
+  const save = () => {
     setModalOpen(false);
     try {
       saveFile(
         project.split("/").slice(0, 2).join("/") + "/.editor/config.json",
         JSON.stringify(configs)
       );
-      toast(true, "success", "project configs updated");
-      // toast(true, 'success', 'project configs updated');
+      toast.success("project configs updated")
     } catch (error) {
-      console.error(error);
-      toast(true, "error", error as string);
+      toast.error(error as string)
     }
   };
-
-  const { useToast } = useToastContext();
 
   return (
     <>
@@ -95,7 +91,7 @@ function ProjectConfigForm({ project, setModalOpen }: Props) {
         <Button
           disableRipple
           variant="contained"
-          onClick={() => save(useToast)}
+          onClick={() => save()}
         >
           Save
         </Button>

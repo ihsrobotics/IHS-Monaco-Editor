@@ -33,10 +33,9 @@ function ToolBar({ isFinished, PID }: Props) {
     editorTabs: { array: tabs },
     selectedTabValue,
   } = useEditorTabsContext();
-  const {useToast: toast} = useToastContext();
 
   const tabIndex = tabs.findIndex((tab) => tab.value === selectedTabValue);
-  const { useToast } = useToastContext();
+  const { toast } = useToastContext();
   const { loadFiles } = useContext(LoadFilesContext);
   const { useModal, setOpen } = useContext(ModalContext);
 
@@ -49,7 +48,7 @@ function ToolBar({ isFinished, PID }: Props) {
       selectedTabValue,
       tabs[tabIndex].editorContent,
       undefined,
-      useToast
+      toast
     );
     tabs[tabIndex].editorSaved = true;
   };
@@ -57,11 +56,11 @@ function ToolBar({ isFinished, PID }: Props) {
   const handleClickCompile = async () => {
     await saveFile(selectedTabValue, tabs[tabIndex].editorContent, undefined);
     tabs[tabIndex].editorSaved = true;
-    compileProject(selectedTabValue, useToast);
+    compileProject(selectedTabValue, toast);
   };
 
   const handleClickRun = () => {
-    runProject(selectedTabValue, useToast);
+    runProject(selectedTabValue, toast);
   };
 
   const handleClickStop = () => {
@@ -98,8 +97,7 @@ function ToolBar({ isFinished, PID }: Props) {
     })
       .then((response) => {
         if (!response.ok) {
-          toast(true, 'error', 'Error downloading project');
-          throw new Error("Network response was not ok");
+          toast.error('Error downloading project' + response.status)
         }
         return response.blob();
       })
@@ -113,7 +111,7 @@ function ToolBar({ isFinished, PID }: Props) {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       })
-      .catch((error) => toast(true, 'error', error));
+      .catch((error) => toast.error(error));
   };
 
   return (

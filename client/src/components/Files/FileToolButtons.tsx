@@ -15,7 +15,7 @@ interface Props {
 }
 
 function FileToolButtons({ fileType, fileName, visible }: Props) {
-  const { useToast } = useToastContext();
+  const { toast } = useToastContext();
   const { loadFiles } = useContext(LoadFilesContext);
 
   return (
@@ -24,14 +24,14 @@ function FileToolButtons({ fileType, fileName, visible }: Props) {
         <>
           <Tooltip title={"rename"} placement="top" arrow>
             <DriveFileRenameOutlineIcon
-              onClick={() => rename(fileName, loadFiles, useToast)}
+              onClick={() => rename(fileName, loadFiles, toast)}
               style={{ height: "20px" }}
               className="brightenOnHover"
             />
           </Tooltip>
           <Tooltip title={"delete"} placement="top" arrow>
             <DeleteIcon
-              onClick={() => deleteItem(fileName, loadFiles, useToast)}
+              onClick={() => deleteItem(fileName, loadFiles, toast)}
               style={{ height: "20px" }}
               className="brightenOnHover"
             />
@@ -40,14 +40,14 @@ function FileToolButtons({ fileType, fileName, visible }: Props) {
             <>
               <Tooltip title={"new file"} placement="top" arrow>
                 <NoteAddIcon
-                  onClick={() => newFile(fileName, loadFiles, useToast)}
+                  onClick={() => newFile(fileName, loadFiles, toast)}
                   style={{ height: "20px" }}
                   className="brightenOnHover"
                 />
               </Tooltip>
               <Tooltip title={"new folder"} placement="top" arrow>
                 <CreateNewFolderIcon
-                  onClick={() => newFolder(fileName, loadFiles, useToast)}
+                  onClick={() => newFolder(fileName, loadFiles, toast)}
                   style={{ height: "20px" }}
                   className="brightenOnHover"
                 />

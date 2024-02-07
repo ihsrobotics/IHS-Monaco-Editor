@@ -2,10 +2,20 @@ import React, { ReactNode } from "react";
 import Toast, { ToastProps } from "../Toast";
 import { AlertColor } from "@mui/material";
 
-export const ToastContext = React.createContext<{
-  useToast: ToastFunction;
-}>({
-  useToast: () => null,
+export interface Toast {
+  success: (message: string) => void;
+  warn: (message: string) => void;
+  error: (message: string) => void;
+  info: (message: string) => void;
+}
+
+export const ToastContext = React.createContext<{ toast: Toast }>({
+  toast: {
+    success: () => null,
+    warn: () => null,
+    error: () => null,
+    info: () => null,
+  },
 });
 
 interface Props {
@@ -19,22 +29,34 @@ export type ToastFunction = (
 ) => void;
 
 function ToastProvider({ children }: Props) {
-  const [toast, setToast] = React.useState<ToastProps>({
+  const [toastState, setToastState] = React.useState<ToastProps>({
     open: false,
     severity: "success",
     message: "",
   });
-  const useToast = (open: boolean, severity: AlertColor, message: string) => {
-    setToast({ open: open, severity: severity, message: message });
+
+  const toast = {
+    success: (message: string) => {
+      setToastState({ open: true, severity: "success", message: message });
+    },
+    warn: (message: string) => {
+      setToastState({ open: true, severity: "warning", message: message });
+    },
+    error: (message: string) => {
+      setToastState({ open: true, severity: "error", message: message });
+    },
+    info: (message: string) => {
+      setToastState({ open: true, severity: "info", message: message });
+    },
   };
   return (
-    <ToastContext.Provider value={{ useToast }}>
+    <ToastContext.Provider value={{ toast }}>
       {children}
       <Toast
-        open={toast["open"]}
-        severity={toast["severity"]}
-        message={toast["message"]}
-        setToast={setToast}
+        open={toastState["open"]}
+        severity={toastState["severity"]}
+        message={toastState["message"]}
+        setToast={setToastState}
       />
     </ToastContext.Provider>
   );
