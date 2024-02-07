@@ -1,0 +1,116 @@
+.childDirectory {
+  transition: height 0.3s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.directory[data-opened="false"] > .childDirectory {
+  height: 0;
+  overflow: hidden;
+}
+.directory[data-opened="true"] > .childDirectory {
+  height: fit-content;
+}
+
+.file {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-items: center;
+  display: flex;
+  min-width: 0;
+
+}
+
+.hoverEffect:hover {
+  background-color: #282e34;
+  border-top: 1px solid #666666;
+  border-bottom: 1px solid #666666;
+  box-sizing: border-box;
+  height: 24px;
+}
+
+.app-sidebar-content ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.directory {
+  position: relative;
+  padding: 0;
+  height: min-content;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+
+  /* display: flex;
+    align-items: center; */
+}
+
+.directoryName {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+
+}
+
+/* .directoryName:hover{
+    background-color: #282e34;
+    border-top: 1px solid #666666;
+    border-bottom: 1px solid #666666;
+    box-sizing: border-box;
+    height: 24px;
+} */
+
+.fileName {
+  width: 100%;
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+
+}
+
+.fileName > img {
+  height: 16px;
+  width: 24px;
+}
+
+.fileLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.branch {
+  width: 24px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+.branch img {
+  margin: 0;
+  padding: 0;
+  height: 24px;
+  width: 24px;
+}
+
+.brightenOnHover:hover {
+  color: white;
+}
+
+.fileToolButtons {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  background-color: #282e34;
+}
