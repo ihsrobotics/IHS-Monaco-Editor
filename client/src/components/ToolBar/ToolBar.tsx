@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import Stack from "@mui/material/Stack";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import DownloadIcon from "@mui/icons-material/Download";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SaveIcon from "@mui/icons-material/Save";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
@@ -20,6 +21,7 @@ import { LoadFilesContext } from "../Files/context/FilesContext";
 import { ModalContext, ModalFunction } from "../Modal/context/ModalContext";
 import useToastContext from "../Toast/hooks/useToastContext";
 import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
+import { ADDRESS, PORT } from "../../env/address";
 
 interface Props {
   isFinished: boolean;
@@ -27,10 +29,13 @@ interface Props {
 }
 
 function ToolBar({ isFinished, PID }: Props) {
-  const { editorTabs: {array: tabs}, selectedTabValue } = useEditorTabsContext();
+  const {
+    editorTabs: { array: tabs },
+    selectedTabValue,
+  } = useEditorTabsContext();
 
   const tabIndex = tabs.findIndex((tab) => tab.value === selectedTabValue);
-  const { useToast } = useToastContext();
+  const { toast } = useToastContext();
   const { loadFiles } = useContext(LoadFilesContext);
   const { useModal, setOpen } = useContext(ModalContext);
 
@@ -43,7 +48,7 @@ function ToolBar({ isFinished, PID }: Props) {
       selectedTabValue,
       tabs[tabIndex].editorContent,
       undefined,
-      useToast
+      toast
     );
     tabs[tabIndex].editorSaved = true;
   };
@@ -51,11 +56,11 @@ function ToolBar({ isFinished, PID }: Props) {
   const handleClickCompile = async () => {
     await saveFile(selectedTabValue, tabs[tabIndex].editorContent, undefined);
     tabs[tabIndex].editorSaved = true;
-    compileProject(selectedTabValue, useToast);
+    compileProject(selectedTabValue, toast);
   };
 
   const handleClickRun = () => {
-    runProject(selectedTabValue, useToast);
+    runProject(selectedTabValue, toast);
   };
 
   const handleClickStop = () => {
@@ -63,7 +68,9 @@ function ToolBar({ isFinished, PID }: Props) {
   };
 
   const handleClickConfig = (modal: ModalFunction) => {
-    modal(<ProjectConfigForm project={selectedTabValue} setModalOpen={setOpen} />);
+    modal(
+      <ProjectConfigForm project={selectedTabValue} setModalOpen={setOpen} />
+    );
   };
 
   const handleClickSettings = (modal: ModalFunction) => {
@@ -76,6 +83,35 @@ function ToolBar({ isFinished, PID }: Props) {
 
   const handleClickNewProject = (modal: ModalFunction) => {
     modal(<NewProjectForm setModalOpen={setOpen} />);
+  };
+
+  const handleClickDownload = () => {
+
+    const folderName = selectedTabValue.split("/").slice(1, 2).join("/");
+    fetch(`http://${ADDRESS}:${PORT}/api/downloadProject`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        projectName: folderName,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          toast.error('Error downloading project' + response.status)
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${folderName}`;
+        document.body.append(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      })
+      .catch((error) => toast.error(error));
   };
 
   return (
@@ -100,6 +136,12 @@ function ToolBar({ isFinished, PID }: Props) {
 
       <Stack spacing={6} direction={"row"}>
         <Stack spacing={2} direction={"row"}>
+          <ToolBarButton
+            name="download project"
+            handleClick={handleClickDownload}
+            disabled={!tabs[tabIndex]}
+            icon={<DownloadIcon />}
+          />
           <ToolBarButton
             name="save file"
             color={

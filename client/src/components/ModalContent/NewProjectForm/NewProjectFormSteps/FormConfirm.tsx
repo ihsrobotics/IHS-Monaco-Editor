@@ -10,7 +10,7 @@ import { projectProps } from "../hooks/useNewProjectForm";
 import { newFile, newFolder, saveFile } from "../../../../util/shell";
 import { useContext } from "react";
 import path from "path-browserify";
-import { ToastFunction } from "../../../Toast/context/ToastContext";
+import { Toast } from "../../../Toast/context/ToastContext";
 import { ADDRESS, PORT } from "../../../../env/address";
 import { LoadFilesContext } from "../../../Files/context/FilesContext";
 import useToastContext from "../../../Toast/hooks/useToastContext";
@@ -30,7 +30,7 @@ async function makeNewProject(
     links,
     optimization,
   }: projectProps,
-  toast: ToastFunction,
+  toast: Toast,
   loadFiles: () => void
 ) {
   try {
@@ -98,17 +98,16 @@ async function makeNewProject(
       projectName + "/.editor/config.json",
       JSON.stringify(configs)
     );
-    toast(true, "success", projectName + " created successfully");
+    toast.success(`${projectName} created successfully`)
     loadFiles();
   } catch (error) {
-    console.error(error);
-    toast(true, "error", error as string);
+    toast.error(error as string)
   }
 }
 
 function FormConfirm({ prevStep, nextStep, values }: Props) {
   const { loadFiles } = useContext(LoadFilesContext);
-  const { useToast } = useToastContext();
+  const { toast } = useToastContext();
 
   const prev = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -121,7 +120,7 @@ function FormConfirm({ prevStep, nextStep, values }: Props) {
   };
   const next = (e: React.MouseEvent) => {
     e.preventDefault();
-    makeNewProject(values, useToast, loadFiles);
+    makeNewProject(values, toast, loadFiles);
     nextStep();
   };
 

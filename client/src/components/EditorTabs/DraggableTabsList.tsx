@@ -27,7 +27,7 @@ interface Props {
 export default function DraggableTabsList({ onDragEnd }: Props) {
   const { userSettings } = useUserSettingsContext();
 
-  const { useToast } = useToastContext();
+  const { toast } = useToastContext();
 
   const {
     editorTabs: { array: tabs, remove: removeTab },
@@ -54,7 +54,7 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
         tabs[index].value,
         tabs[index].editorContent,
         undefined,
-        useToast
+        toast
       );
     }
 

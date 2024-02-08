@@ -1,13 +1,9 @@
 import React, { SetStateAction } from "react";
-import { ToastFunction } from "../components/Toast/context/ToastContext";
+import { Toast } from "../components/Toast/context/ToastContext";
 import { ADDRESS, PORT } from "../env/address";
 import useArray from "./hooks/useArray";
 
-export function rename(
-  oldName: string,
-  loadFiles: () => void,
-  toast: ToastFunction
-) {
+export function rename(oldName: string, loadFiles: () => void, toast: Toast) {
   let newName = prompt("new file name: ");
   if (newName == null) {
     return;
@@ -21,23 +17,18 @@ export function rename(
   })
     .then((response) => {
       if (response.status == 200) {
-        toast(true, "success", "renamed successfully");
+        toast.success("renamed successfully");
       } else {
-        toast(true, "warning", "status " + response.status);
+        toast.warn("status " + response.status);
       }
       loadFiles();
     })
     .catch((error) => {
-      console.error(error);
-      toast(true, "error", error);
+      toast.error(error);
     });
 }
 
-export function deleteItem(
-  name: string,
-  loadFiles: () => void,
-  toast: ToastFunction
-) {
+export function deleteItem(name: string, loadFiles: () => void, toast: Toast) {
   if (!confirm("delete " + name + "?")) {
     return;
   }
@@ -48,22 +39,21 @@ export function deleteItem(
   })
     .then((response) => {
       if (response.status == 200) {
-        toast(true, "success", "deleted successfully");
+        toast.success("deleted successfully");
       } else {
-        toast(true, "warning", "status " + response.status);
+        toast.warn("status " + response.status);
       }
       loadFiles();
     })
     .catch((error) => {
-      console.error(error);
-      toast(true, "error", error);
+      toast.error(error);
     });
 }
 
 export async function newFile(
   path: string,
   loadFiles?: () => void,
-  toast?: ToastFunction,
+  toast?: Toast,
   newFileName?: string
 ) {
   let fileName = newFileName ? newFileName : prompt("new file name: ");
@@ -78,15 +68,13 @@ export async function newFile(
   })
     .then((response) => {
       if (toast) {
-        if (response.status == 200)
-          toast(true, "success", "created successfully");
-        else toast(true, "warning", "status " + response.status);
+        if (response.status == 200) toast.success("created successfully");
+        else toast.warn("status " + response.status);
       }
       if (loadFiles) loadFiles();
     })
     .catch((error) => {
-      console.error(error);
-      if (toast) toast(true, "error", error);
+      if (toast) toast.error(error);
       throw error;
     });
 }
@@ -94,7 +82,7 @@ export async function newFile(
 export async function newFolder(
   parentDirName: string,
   loadFiles?: () => void,
-  toast?: ToastFunction,
+  toast?: Toast,
   newFolderName?: string
 ) {
   let folderName = newFolderName ? newFolderName : prompt("new folder name: ");
@@ -116,15 +104,13 @@ export async function newFolder(
   })
     .then((response) => {
       if (toast) {
-        if (response.status == 200)
-          toast(true, "success", "created successfully");
-        else toast(true, "warning", "status " + response.status);
+        if (response.status == 200) toast.success("created successfully");
+        else toast.warn("status " + response.status);
       }
       if (loadFiles) loadFiles();
     })
     .catch((error) => {
-      console.error(error);
-      if (toast) toast(true, "error", error);
+      if (toast) toast.error(error);
       throw error;
     });
 }
@@ -142,7 +128,7 @@ export async function saveFile(
   fileName: string,
   fileContent: string,
   setIsFinished?: React.Dispatch<boolean>,
-  toast?: ToastFunction
+  toast?: Toast
 ) {
   await fetch(`http://${ADDRESS}:${PORT}/api/saveFile`, {
     method: "POST",
@@ -152,25 +138,23 @@ export async function saveFile(
     .then((response) => {
       if (toast) {
         if (response.status == 200 || response.status == 204)
-          toast(
-            true,
-            "success",
+          toast.success(
             fileName.split("/").slice(-1).toString() + " saved successfully"
           );
-        else toast(true, "warning", "status " + response.status);
+        else toast.warn("status " + response.status);
       }
       if (setIsFinished) setIsFinished(false);
     })
     .catch((error) => {
       console.error(error);
-      if (toast) toast(true, "error", error);
+      if (toast) toast.error(error);
       throw error;
     });
 }
 
 export async function command(
   command: string,
-  toast?: ToastFunction,
+  toast?: Toast,
   successMessage?: string
 ) {
   try {
@@ -180,17 +164,12 @@ export async function command(
       body: JSON.stringify({ command: command }),
     });
     if (toast && successMessage) {
-      if (response.status == 200) toast(true, "success", successMessage);
-      else
-        toast(
-          true,
-          "warning",
-          "status " + response.status + " " + response.json()
-        );
+      if (response.status == 200) toast.success(successMessage);
+      else toast.warn("status " + response.status + " " + response.json());
     }
     return response.json();
   } catch (error) {
-    if (toast && successMessage) toast(true, "error", error as string);
+    if (toast && successMessage) toast.error(error as string);
     throw error;
   }
 }
@@ -202,28 +181,28 @@ const keyEnterEvent = new KeyboardEvent("keydown", {
   which: 13,
 });
 
-export async function compileProject(project: string, toast: ToastFunction) {
+export async function compileProject(project: string, toast: Toast) {
   const config = JSON.parse(
     await getFile(
       project.split("/").slice(0, 2).join("/") + "/.editor/config.json"
     )
   );
   if (config["compile"].trim() === "") {
-    toast(true, "error", "compile command not set");
+    toast.error("compile command not set");
     return;
   }
   document.getElementById("terminalInput")!.innerText = config["compile"];
   document.getElementById("terminalInput")?.dispatchEvent(keyEnterEvent);
 }
 
-export async function runProject(project: string, toast: ToastFunction) {
+export async function runProject(project: string, toast: Toast) {
   const config = await JSON.parse(
     await getFile(
       project.split("/").slice(0, 2).join("/") + "/.editor/config.json"
     )
   );
   if (config["run"].trim() === "") {
-    toast(true, "error", "run command not set");
+    toast.error("run command not set");
     return;
   }
   document.getElementById("terminalInput")!.innerText = config["run"];

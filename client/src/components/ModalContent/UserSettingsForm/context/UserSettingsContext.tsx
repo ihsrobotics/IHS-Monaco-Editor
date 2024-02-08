@@ -1,6 +1,7 @@
 import React, { ReactNode, useState, useEffect } from "react";
 
 export type settingItem =
+  | "buttonRipple"
   | "ligatures"
   | "editorTheme"
   | "smoothCursorBlink"
@@ -14,6 +15,7 @@ export type settingItem =
   | "saveButtonSaveProject";
 
 const DEFAULT_SETTINGS = {
+  buttonRipple: true,
   ligatures: true,
   editorTheme: true,
   smoothCursorBlink: true,
