@@ -16,7 +16,7 @@ export type settingItem =
   | "saveButtonSaveProject";
 
 const DEFAULT_SETTINGS = {
-  buttonRipple: true,
+  buttonRipple: false,
   ligatures: true,
   editorTheme: true,
   smoothCursorBlink: true,
