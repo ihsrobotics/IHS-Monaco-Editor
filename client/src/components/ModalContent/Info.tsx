@@ -19,6 +19,8 @@ function Info() {
           Source
         </Link>
         <br />
+        {version == '1.3.4' && <strong>v1.3.4 has online collaborative editing disabled.</strong>}
+        <br />
         Unreleased features: full collaborative editing, intellisense, advanced
         save features
         <br /> <br />
