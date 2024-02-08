@@ -44,7 +44,7 @@ function SideBar({
         document.body.style.cursor = "auto";
       }
     },
-    [isResizing]
+    [isResizing, widthUpdateFunction]
   );
 
   useEffect(() => {

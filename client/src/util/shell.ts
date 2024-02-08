@@ -146,7 +146,6 @@ export async function saveFile(
       if (setIsFinished) setIsFinished(false);
     })
     .catch((error) => {
-      console.error(error);
       if (toast) toast.error(error);
       throw error;
     });
@@ -237,17 +236,17 @@ function readShellOutput(
     const parsedObject = isValidJSON(value);
     // this is the passed back PID
     if (parsedObject !== null && parsedObject["pid"] != undefined) {
-      console.log("pid found:", parsedObject["pid"]);
+      // console.log("pid found:", parsedObject["pid"]);
       setPID(Number.parseInt(parsedObject["pid"]) + 1);
     }
     // this is the passed back new path
     else if (parsedObject !== null && parsedObject["path"] != undefined) {
-      console.log("path found:", parsedObject["path"]);
+      // console.log("path found:", parsedObject["path"]);
       if (parsedObject.path !== "invalid") setCurrentDir(parsedObject["path"]);
     }
     // this is regular output
     else if (value !== "") {
-      console.log("regular value:", value);
+      // console.log("regular value:", value);
       outputBuffer += value.substring(1, value.length - 1);
 
       updateTerminalOutput([
@@ -298,7 +297,6 @@ export async function liveShell(
       (await reader?.read()) as ReadableStreamReadResult<Uint8Array>;
 
     if (done) {
-      console.log("done");
       setIsFinished(true);
       // wait for the rerender to finish before setting the focus
       setTimeout(() => {

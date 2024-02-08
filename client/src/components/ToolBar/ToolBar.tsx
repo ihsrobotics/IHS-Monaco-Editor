@@ -86,8 +86,8 @@ function ToolBar({ isFinished, PID }: Props) {
   };
 
   const handleClickDownload = () => {
-
     const folderName = selectedTabValue.split("/").slice(1, 2).join("/");
+    toast.info("Begin download for " + folderName);
     fetch(`http://${ADDRESS}:${PORT}/api/downloadProject`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

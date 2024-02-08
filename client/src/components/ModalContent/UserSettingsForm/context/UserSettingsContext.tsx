@@ -1,4 +1,5 @@
-import React, { ReactNode, useState, useEffect } from "react";
+import React, { ReactNode, useState, useEffect, useCallback } from "react";
+import useToastContext from "../../../Toast/hooks/useToastContext";
 
 export type settingItem =
   | "buttonRipple"
@@ -27,7 +28,7 @@ const DEFAULT_SETTINGS = {
   pythonIntellisense: false,
   cppIntellisense: false,
   saveButtonSaveProject: false,
-}
+};
 
 interface Props {
   children: ReactNode;
@@ -35,15 +36,16 @@ interface Props {
 
 export const UserSettingsContext = React.createContext<{
   userSettings: { [key in settingItem]: boolean };
-  updateUserSettings: (settingName: settingItem, newValue: boolean) => void
+  updateUserSettings: (settingName: settingItem, newValue: boolean) => void;
 }>({ userSettings: DEFAULT_SETTINGS, updateUserSettings: () => null });
 
 export default function UserSettingsProvider({ children }: Props) {
+  const { toast } = useToastContext();
   const [userSettings, setUserSettings] = useState<{
     [key in settingItem]: boolean;
   }>(DEFAULT_SETTINGS);
 
-  const fetchUserSettings = () => {
+  const fetchUserSettings = useCallback(() => {
     try {
       const storedSettings = localStorage.getItem("userSettings");
       if (storedSettings) {
@@ -54,13 +56,14 @@ export default function UserSettingsProvider({ children }: Props) {
         }));
       }
     } catch (error) {
-      console.error("Error fetching user settings:", error);
+      toast.error("Error fetching user settings " + error);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchUserSettings();
-  }, []);
+  }, [fetchUserSettings]);
 
   const updateUserSettings = (settingName: settingItem, newValue: boolean) => {
     try {
@@ -78,7 +81,12 @@ export default function UserSettingsProvider({ children }: Props) {
   };
 
   return (
-    <UserSettingsContext.Provider value={{ userSettings: userSettings, updateUserSettings: updateUserSettings }}>
+    <UserSettingsContext.Provider
+      value={{
+        userSettings: userSettings,
+        updateUserSettings: updateUserSettings,
+      }}
+    >
       {children}
     </UserSettingsContext.Provider>
   );

@@ -5,6 +5,7 @@ import { keyInt, liveShell } from "../../util/shell";
 // import { ADDRESS, PORT } from "../../env/address";
 import useArray from "../../util/hooks/useArray";
 import useTerminalUser from "./useTerminalUser";
+import useToastContext from "../Toast/hooks/useToastContext";
 
 interface Props {
   isFinished: boolean;
@@ -15,6 +16,7 @@ interface Props {
 
 function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
   // [path, command, response]
+  const { toast } = useToastContext();
   const terminalCommands = useArray<[string, string, string]>([]);
   const [currentCommand, setCurrentCommand] = useState<string>("");
 
@@ -133,6 +135,7 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
     // keyboard interrupt
     if (e.ctrlKey && e.code === "KeyC" && !isFinished) {
       e.preventDefault();
+      toast.info("Stop process" + PID);
       keyInt(PID);
     }
     // alternate copy
