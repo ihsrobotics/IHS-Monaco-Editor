@@ -71,7 +71,7 @@ On the Wombat with custom OS this should be `pi`
 Then at the first available line, type toe following:
 
 ```shell
-@reboot pm2 start <your path>/IHS-Monaco-Editor/server/index.js
+@reboot pm2 start <your path>/IHS-Monaco-Editor/server/
 @reboot serve -s <your path>/IHS-Monaco-Editor/client/dist -l 3000
 ```
 
