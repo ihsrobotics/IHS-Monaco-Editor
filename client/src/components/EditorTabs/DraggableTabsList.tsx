@@ -58,13 +58,9 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
       );
     }
 
-    console.log(index)
-    console.log(tabs)
-
     const removedValue = tabs[index].value;
 
     if (selectedTabValue === removedValue) {
-      console.log(true)
       if (index + 1 < tabs.length) {
         setSelectedTabValue(tabs[index + 1].value);
       } else if (tabs.length > 1) {

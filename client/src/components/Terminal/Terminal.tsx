@@ -125,10 +125,6 @@ function Terminal({ isFinished, setIsFinished, PID, setPID }: Props) {
         );
       }
     }
-    // else if (e.key == "Control") {
-    //   console.log(currentDir);
-    //   console.log(terminalCommands);
-    // }
   };
   // special control + c behavior
   const handleWindowKeyDown = (e: KeyboardEvent) => {
