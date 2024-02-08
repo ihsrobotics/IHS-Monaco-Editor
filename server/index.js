@@ -6,6 +6,8 @@ const { exec, spawn } = require("child_process");
 const cors = require("cors");
 const os = require("os");
 const archiver = require("archiver");
+const {pythonBoilerplate, cppBoilerplate} = require("./server-config.json")
+
 
 const app = express();
 const PORT = 5000;
@@ -21,17 +23,17 @@ if (!fsSync.existsSync(DIRECTORY_PATH)) {
 
 process.env.PYTHONUNBUFFERED = "1";
 
-let PY_BOILERPLATE = "";
-let CPP_BOILERPLATE = "";
+// let PY_BOILERPLATE = "";
+// let CPP_BOILERPLATE = "";
 
-async function loadBp() {
-  const boilerplate = JSON.parse(
-    await fs.readFile("./server-config.json", "utf-8")
-  );
-  PY_BOILERPLATE = boilerplate.pythonBoilerplate;
-  CPP_BOILERPLATE = boilerplate.cppBoilerplate;
-}
-loadBp();
+// async function loadBp() {
+//   const boilerplate = JSON.parse(
+//     await fs.readFile("./server-config.json", "utf-8")
+//   );
+//   PY_BOILERPLATE = boilerplate.pythonBoilerplate;
+//   CPP_BOILERPLATE = boilerplate.cppBoilerplate;
+// }
+// loadBp();
 
 async function formatFileHierarchy(directoryPath) {
   const fileHierarchy = {};
@@ -137,7 +139,7 @@ app.post("/api/writeBp", async (req, res) => {
   if (boilerplate === "py-bp") {
     await fs.writeFile(
       path.join(DIRECTORY_PATH, filePath, "src", "main.py"),
-      PY_BOILERPLATE,
+      pythonBoilerplate,
       (err) => {
         if (err) {
           return res.status(500).json({ error: err });
@@ -159,7 +161,7 @@ app.post("/api/writeBp", async (req, res) => {
   } else if (boilerplate === "cpp-bp") {
     await fs.writeFile(
       path.join(DIRECTORY_PATH, filePath, "src", "main.cpp"),
-      CPP_BOILERPLATE,
+      cppBoilerplate,
       (err) => {
         if (err) {
           return res.status(500).json({ error: err });
