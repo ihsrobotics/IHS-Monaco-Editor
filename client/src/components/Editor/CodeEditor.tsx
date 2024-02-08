@@ -108,12 +108,14 @@ function CodeEditor({ fileName, content }: Props) {
   }
 
   function handleChange() {
-    if (editorRef.current == undefined ) return;
-    updateTab(index, {
-      ...tabs[index],
-      editorContent: editorRef.current.getValue(),
-      editorSaved: false,
-    });
+    if (editorRef.current == undefined || !fileLoaded){
+        updateTab(index, {
+        ...tabs[index],
+        editorContent: editorRef.current!.getValue(),
+        editorSaved: false,
+      });
+    }
+    
   }
 
   return (
