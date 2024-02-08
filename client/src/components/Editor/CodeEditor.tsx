@@ -17,7 +17,7 @@ interface Props {
   content: Promise<string>;
 }
 
-function CodeEditor({ fileName }: Props) {
+function CodeEditor({ fileName, content }: Props) {
   const { userSettings } = useUserSettingsContext();
   const { toast } = useToastContext();
 
@@ -47,6 +47,9 @@ function CodeEditor({ fileName }: Props) {
           setIsThemeLoaded(true);
         })
         .catch((error) => toast.error(error));
+    else {
+      setIsThemeLoaded(true);
+    }
 
     return () => {
       if (editorRef.current) {
@@ -60,9 +63,9 @@ function CodeEditor({ fileName }: Props) {
     };
   }, []);
 
-  // const [fileLoaded, setFileLoaded] = useState(true);
+  const [fileLoaded, setFileLoaded] = useState(true);
 
-  function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
+  async function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
     editorRef.current = editor;
     // doc = new Doc();
     // provider = new WebrtcProvider(fileName, doc);
@@ -98,6 +101,10 @@ function CodeEditor({ fileName }: Props) {
     //     ? (tabs[index].editorContent = editorRef.current.getValue())
     //     : null;
     // }, 500);
+    if(editorRef.current){
+      editorRef.current.setValue(await content);
+      setFileLoaded(true);
+    }
   }
 
   function handleChange() {
@@ -111,14 +118,14 @@ function CodeEditor({ fileName }: Props) {
 
   return (
     <>
-      <p style={{ display: isThemeLoaded ? "none" : "block", color: "#BFC6C8" }}>
+      <p style={{ display: isThemeLoaded && fileLoaded ? "none" : "block", color: "#BFC6C8" }}>
         Loading...
       </p>
       <div
         style={{
           height: "100%",
           width: "100%",
-          visibility: isThemeLoaded ? "visible" : "hidden",
+          visibility: isThemeLoaded && fileLoaded ? "visible" : "hidden",
         }}
       >
         <Editor
