@@ -65,7 +65,8 @@ serve -s dist -l 3000
 
 To start IME on startup on linux, edit the crontab file.
 To open the crontab file:
-`sudo crontab -e`
+`sudo crontab -e -u <username>`
+On the Wombat with custom OS this should be `pi`
 
 Then at the first available line, type toe following:
 
@@ -74,7 +75,7 @@ Then at the first available line, type toe following:
 @reboot serve -s <your path>/IHS-Monaco-Editor/client/dist -l 3000
 ```
 
-Replace `<your path>` with the path to the cloned folder (such as ~/Documents).
+Replace `<your path>` with the path to the cloned folder (such as /home/pi/Documents). Note: this must be an absolute path not relative or home path.
 
 **The address of the editor on the Wombat on AP mode should be `10.42.0.1:3000`, but if that doesn't work you can check the ip using `ifconfig` in the terminal.**
 
