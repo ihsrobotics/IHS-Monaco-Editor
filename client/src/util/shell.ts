@@ -16,10 +16,10 @@ export function rename(oldName: string, loadFiles: () => void, toast: Toast) {
     body: JSON.stringify({ command: "mv " + oldName + " " + newName }),
   })
     .then((response) => {
-      if (response.status == 200) {
+      if (response.ok) {
         toast.success("renamed successfully");
       } else {
-        toast.warn("status " + response.status);
+        toast.error("status " + response.status + " " + response.json());
       }
       loadFiles();
     })
@@ -38,10 +38,10 @@ export function deleteItem(name: string, loadFiles: () => void, toast: Toast) {
     body: JSON.stringify({ command: "rm -rf " + name }),
   })
     .then((response) => {
-      if (response.status == 200) {
+      if (response.ok) {
         toast.success("deleted successfully");
       } else {
-        toast.warn("status " + response.status);
+        toast.error("status " + response.status + " " + response.json());
       }
       loadFiles();
     })
@@ -68,8 +68,8 @@ export async function newFile(
   })
     .then((response) => {
       if (toast) {
-        if (response.status == 200) toast.success("created successfully");
-        else toast.warn("status " + response.status);
+        if (response.ok) toast.success("created successfully");
+        else toast.error("status " + response.status + " " + response.json());
       }
       if (loadFiles) loadFiles();
     })
@@ -104,8 +104,8 @@ export async function newFolder(
   })
     .then((response) => {
       if (toast) {
-        if (response.status == 200) toast.success("created successfully");
-        else toast.warn("status " + response.status);
+        if (response.ok) toast.success("created successfully");
+        else toast.error("status " + response.status + " " + response.json());
       }
       if (loadFiles) loadFiles();
     })
@@ -137,11 +137,11 @@ export async function saveFile(
   })
     .then((response) => {
       if (toast) {
-        if (response.status == 200 || response.status == 204)
+        if (response.ok)
           toast.success(
             fileName.split("/").slice(-1).toString() + " saved successfully"
           );
-        else toast.warn("status " + response.status);
+        else toast.error("status " + response.status + " " + response.json());
       }
       if (setIsFinished) setIsFinished(false);
     })
@@ -163,8 +163,8 @@ export async function command(
       body: JSON.stringify({ command: command }),
     });
     if (toast && successMessage) {
-      if (response.status == 200) toast.success(successMessage);
-      else toast.warn("status " + response.status + " " + response.json());
+      if (response.ok) toast.success(successMessage);
+      else toast.error("status " + response.status + " " + response.json());
     }
     return response.json();
   } catch (error) {
@@ -191,7 +191,7 @@ export async function compileProject(project: string, toast: Toast) {
     return;
   }
   document.getElementById("terminalInput")!.innerText = config["compile"];
-  document.getElementById("terminalInput")?.dispatchEvent(keyEnterEvent);
+  document.getElementById("terminalInput")!.dispatchEvent(keyEnterEvent);
 }
 
 export async function runProject(project: string, toast: Toast) {
@@ -205,7 +205,7 @@ export async function runProject(project: string, toast: Toast) {
     return;
   }
   document.getElementById("terminalInput")!.innerText = config["run"];
-  document.getElementById("terminalInput")?.dispatchEvent(keyEnterEvent);
+  document.getElementById("terminalInput")!.dispatchEvent(keyEnterEvent);
 }
 export async function stopRunProject(pid: number) {
   keyInt(pid);
