@@ -22,11 +22,25 @@ import { ModalContext, ModalFunction } from "../Modal/context/ModalContext";
 import useToastContext from "../Toast/hooks/useToastContext";
 import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
 import { ADDRESS, PORT } from "../../env/address";
+import { styled } from "@mui/material/styles";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 
 interface Props {
   isFinished: boolean;
   PID: number | undefined;
 }
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 function ToolBar({ isFinished, PID }: Props) {
   const {
@@ -97,7 +111,7 @@ function ToolBar({ isFinished, PID }: Props) {
     })
       .then((response) => {
         if (!response.ok) {
-          toast.error('Error downloading project' + response.status)
+          toast.error("Error downloading project" + response.status);
         }
         return response.blob();
       })
@@ -114,6 +128,29 @@ function ToolBar({ isFinished, PID }: Props) {
       .catch((error) => toast.error(error));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(`http://${ADDRESS}:${PORT}/api/uploadProject`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          toast.success("project uploaded successfully");
+          loadFiles();
+        } else {
+          toast.error("status " + response.status + " " + response.json());
+        }
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
   return (
     <div className="toolBar">
       <Stack spacing={2} direction={"row"}>
@@ -128,12 +165,24 @@ function ToolBar({ isFinished, PID }: Props) {
           New Project
         </Button>
         <ToolBarButton
+          name="upload project"
+          handleClick={() => {}}
+          icon={<DriveFolderUploadIcon />}
+          component="label"
+        >
+          <VisuallyHiddenInput
+            type="file"
+            accept=".zip"
+            onChange={(e) => handleFileChange(e)}
+          />
+        </ToolBarButton>
+
+        <ToolBarButton
           name="reload files"
           handleClick={handleClickReloadFiles}
           icon={<ReplayIcon />}
         />
       </Stack>
-
       <Stack spacing={6} direction={"row"}>
         <Stack spacing={2} direction={"row"}>
           <ToolBarButton
