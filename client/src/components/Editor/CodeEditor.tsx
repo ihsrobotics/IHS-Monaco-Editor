@@ -35,8 +35,13 @@ const CodeEditor = memo(function CodeEditor({ fileName, content }: Props) {
     editorRef.current = editor;
 
     if (editorRef.current) {
-      if (tabs[index].editorContent === "") {
-        editorRef.current.setValue(await content);
+      if (tabs[index].editorContent === "__IME_EDITOR_CONTENT_NOT_LOADED__") {
+        const editorContent = await content;
+        editorRef.current.setValue(editorContent);
+        updateTab(index, {
+          ...tabs[index],
+          editorContent: editorContent,
+        });
       } else {
         // this needs an await otherwise it will be an empty string
         editorRef.current.setValue(await tabs[index].editorContent);

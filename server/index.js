@@ -106,7 +106,7 @@ app.post("/api/shell", (req, res) => {
 
 app.post("/api/saveFile", async (req, res) => {
   const { fileName, content } = req.body;
-  if (!fileName || !content) {
+  if (!fileName || content === undefined) {
     return res
       .status(400)
       .json({ error: "Filename and content parameter are required" });
@@ -305,7 +305,7 @@ app.post("/api/uploadProject", upload.single("file"), async (req, res) => {
     fsSync.unlinkSync(zipFilePath);
     res.sendStatus(200);
   } catch (error) {
-    res.status(500).send('Error unzipping file.');
+    res.status(500).send("Error unzipping file.");
   }
 });
 

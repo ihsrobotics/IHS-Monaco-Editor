@@ -64,7 +64,7 @@ function FileComponent({ name, depth }: Props) {
       label: name.split("/").slice(-1).toString(),
       value: name,
       content: <CodeEditor fileName={name} content={getFile(name)} />,
-      editorContent: "",
+      editorContent: "__IME_EDITOR_CONTENT_NOT_LOADED__",
       editorSaved: true,
     });
     setSelectedTabValue(name);
