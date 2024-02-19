@@ -22,7 +22,7 @@ const DEFAULT_SETTINGS = {
   smoothCursorBlink: true,
   smoothCaretAnimation: true,
   minimap: true,
-  saveFileOnFileChange: false,
+  saveFileOnFileChange: true,
   saveFileOnEditorClose: true,
   showEditorConfigFolder: false,
   pythonIntellisense: false,

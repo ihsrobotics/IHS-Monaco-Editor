@@ -61,14 +61,22 @@ function ToolBar({ isFinished, PID }: Props) {
     await saveFile(
       selectedTabValue,
       tabs[tabIndex].editorContent,
-      undefined,
-      toast
+      toast,
+      () => {
+        updateTabs(tabIndex, { ...tabs[tabIndex], editorSaved: true });
+      }
     );
-    updateTabs(tabIndex, { ...tabs[tabIndex], editorSaved: true });
   };
 
   const handleClickCompile = async () => {
-    await saveFile(selectedTabValue, tabs[tabIndex].editorContent, undefined);
+    await saveFile(
+      selectedTabValue,
+      tabs[tabIndex].editorContent,
+      undefined,
+      () => {
+        updateTabs(tabIndex, { ...tabs[tabIndex], editorSaved: true });
+      }
+    );
     compileProject(selectedTabValue, toast);
   };
 

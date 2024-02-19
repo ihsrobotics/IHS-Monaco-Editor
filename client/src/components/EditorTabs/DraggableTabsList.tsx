@@ -53,7 +53,6 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
       saveFile(
         tabs[index].value,
         tabs[index].editorContent,
-        undefined,
         toast
       );
     }

@@ -127,8 +127,8 @@ export async function getFile(path: string) {
 export async function saveFile(
   fileName: string,
   fileContent: string,
-  setIsFinished?: React.Dispatch<boolean>,
-  toast?: Toast
+  toast?: Toast, 
+  setSaved?: () => void
 ) {
   await fetch(`http://${ADDRESS}:${PORT}/api/saveFile`, {
     method: "POST",
@@ -143,7 +143,9 @@ export async function saveFile(
           );
         else toast.error("status " + response.status + " " + response.json());
       }
-      if (setIsFinished) setIsFinished(false);
+      if(response.ok && setSaved){
+        setSaved();
+      }
     })
     .catch((error) => {
       if (toast) toast.error(error);
