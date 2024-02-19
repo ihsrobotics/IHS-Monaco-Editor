@@ -44,7 +44,7 @@ const VisuallyHiddenInput = styled("input")({
 
 function ToolBar({ isFinished, PID }: Props) {
   const {
-    editorTabs: { array: tabs },
+    editorTabs: { array: tabs, update: updateTabs },
     selectedTabValue,
   } = useEditorTabsContext();
 
@@ -64,12 +64,11 @@ function ToolBar({ isFinished, PID }: Props) {
       undefined,
       toast
     );
-    tabs[tabIndex].editorSaved = true;
+    updateTabs(tabIndex, { ...tabs[tabIndex], editorSaved: true });
   };
 
   const handleClickCompile = async () => {
     await saveFile(selectedTabValue, tabs[tabIndex].editorContent, undefined);
-    tabs[tabIndex].editorSaved = true;
     compileProject(selectedTabValue, toast);
   };
 
@@ -128,7 +127,7 @@ function ToolBar({ isFinished, PID }: Props) {
       .catch((error) => toast.error(error));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
 
@@ -173,7 +172,7 @@ function ToolBar({ isFinished, PID }: Props) {
           <VisuallyHiddenInput
             type="file"
             accept=".zip"
-            onChange={(e) => handleFileChange(e)}
+            onChange={handleFileUpload}
           />
         </ToolBarButton>
 
@@ -207,7 +206,7 @@ function ToolBar({ isFinished, PID }: Props) {
           <ToolBarButton
             name="save file + compile project"
             handleClick={handleClickCompile}
-            disabled={!tabs[tabIndex] || !isFinished}
+            disabled={!tabs[tabIndex]}
             icon={<TextSnippetIcon />}
           />
           <ToolBarButton
