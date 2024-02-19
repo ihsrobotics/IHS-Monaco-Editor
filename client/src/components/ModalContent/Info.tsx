@@ -20,8 +20,7 @@ function Info() {
         </Link>
         <br />
         <br />
-        Unreleased features: collaborative editing, intellisense, advanced
-        save features
+        Unreleased features: collaborative editing, intellisense
         <br /> <br />
         To rename, delete, or to add new file or folder, shift and hover over an
         existing file or folder.
