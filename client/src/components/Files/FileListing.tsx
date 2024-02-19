@@ -127,7 +127,8 @@ function FileListing() {
   return isFilesLoaded ? (
     <ul
       style={{
-        overflow: "hidden",
+        overflowX: "hidden",
+        overflowY: "auto",
         textOverflow: "ellipsis",
         minWidth: "0",
         margin: "0",
