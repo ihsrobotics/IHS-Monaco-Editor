@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
 const MonacoEditor = loadable(() => import("react-monaco-editor"));
 import { editor } from "monaco-editor";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { useState } from "react";
 import * as githubDark from "../../assets/github-dark.json";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
@@ -12,7 +12,9 @@ interface Props {
   content: Promise<string>;
 }
 
-function CodeEditor({ fileName, content }: Props) {
+const MemoIzedMonacoEditor = memo(MonacoEditor);
+
+const CodeEditor = memo(function CodeEditor({ fileName, content }: Props) {
   const { userSettings } = useUserSettingsContext();
 
   const fileExtension: string =
@@ -30,11 +32,15 @@ function CodeEditor({ fileName, content }: Props) {
   editor.defineTheme("github-dark", githubDark as editor.IStandaloneThemeData);
 
   async function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
-    if (fileLoaded) return;
     editorRef.current = editor;
 
     if (editorRef.current) {
-      editorRef.current.setValue(await content);
+      if (tabs[index].editorContent === "") {
+        editorRef.current.setValue(await content);
+      } else {
+        // this needs an await otherwise it will be an empty string
+        editorRef.current.setValue(await tabs[index].editorContent);
+      }
       setFileLoaded(true);
     }
   }
@@ -43,19 +49,17 @@ function CodeEditor({ fileName, content }: Props) {
     if (!editorRef.current) return;
 
     const originalValue = editorRef.current.getValue();
-    console.log("reset original value");
     const interval = setInterval(() => {
       if (!editorRef.current) return;
       const newValue = editorRef.current.getValue();
-      if (newValue !== originalValue && fileLoaded && tabs[index].editorSaved) {
+      if (newValue !== originalValue && fileLoaded) {
         updateTab(index, {
           ...tabs[index],
           editorContent: newValue,
           editorSaved: false,
         });
-        console.log(tabs[index].editorSaved);
       }
-    }, 15);
+    }, 10);
 
     return () => {
       clearInterval(interval);
@@ -79,11 +83,10 @@ function CodeEditor({ fileName, content }: Props) {
           visibility: fileLoaded ? "visible" : "hidden",
         }}
       >
-        <MonacoEditor
+        <MemoIzedMonacoEditor
           height="100%"
           width="100%"
           editorDidMount={handleEditorDidMount}
-          // editorWillMount={handleEditorDidMount}
           theme={userSettings.editorTheme ? "github-dark" : "vs-dark"}
           options={{
             fontLigatures: userSettings.ligatures,
@@ -114,6 +117,6 @@ function CodeEditor({ fileName, content }: Props) {
       </div>
     </>
   );
-}
+});
 
 export default CodeEditor;
