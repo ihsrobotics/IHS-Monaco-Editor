@@ -1,30 +1,35 @@
 import { Button, Tooltip } from "@mui/material";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
-interface ToolBarButtonProps {
+interface ToolBarButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   name: string;
   handleClick: () => void;
   icon: ReactNode;
   disabled?: boolean;
   color?:
-  | "success"
-  | "info"
-  | "warning"
-  | "error"
-  | "primary"
-  | "inherit"
-  | "secondary"
-  | undefined;
-  visible?: boolean
+    | "success"
+    | "info"
+    | "warning"
+    | "error"
+    | "primary"
+    | "inherit"
+    | "secondary"
+    | undefined;
+  visible?: boolean;
+  children?: ReactNode;
+  component?: React.ElementType;
 }
 
 function ToolBarButton({
   name,
   handleClick,
   icon,
-  disabled=false,
-  color='primary',
-  visible=true
+  disabled = false,
+  color = "primary",
+  visible = true,
+  children = "",
+  component = "button",
 }: ToolBarButtonProps) {
   return (
     <Tooltip title={name} arrow>
@@ -35,8 +40,9 @@ function ToolBarButton({
           onClick={handleClick}
           disabled={disabled}
           style={{ display: visible ? "" : "none" }}
+          component={component}
         >
-          {icon}
+          {icon} {children}
         </Button>
       </span>
     </Tooltip>

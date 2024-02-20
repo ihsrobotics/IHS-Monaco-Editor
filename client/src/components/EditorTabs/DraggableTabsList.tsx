@@ -53,7 +53,6 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
       saveFile(
         tabs[index].value,
         tabs[index].editorContent,
-        undefined,
         toast
       );
     }
@@ -63,7 +62,7 @@ export default function DraggableTabsList({ onDragEnd }: Props) {
     if (selectedTabValue === removedValue) {
       if (index + 1 < tabs.length) {
         setSelectedTabValue(tabs[index + 1].value);
-      } else if (tabs.length !== 0) {
+      } else if (tabs.length > 1) {
         setSelectedTabValue(tabs[0].value);
       } else {
         setSelectedTabValue("");

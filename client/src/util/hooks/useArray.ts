@@ -15,7 +15,14 @@ function useArray<T>(defaultValue: T[]) {
     setArray((a) => [
       ...a.slice(0, index),
       newElement,
-      ...a.slice(index + 1, a.length - 1),
+      ...a.slice(index + 1),
+    ]);
+  }
+  function updateCallback(index: number, updater: (prevArray: T) => T) {
+    setArray((a) => [
+      ...a.slice(0, index),
+      updater(a[index]),
+      ...a.slice(index + 1),
     ]);
   }
 
@@ -30,6 +37,7 @@ function useArray<T>(defaultValue: T[]) {
     push,
     filter,
     update,
+    updateCallback,
     remove,
   };
 }

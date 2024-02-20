@@ -103,6 +103,14 @@ Replace `<your path>` with the path to the cloned folder (such as /home/pi/Docum
 - Download project button
 - MUI button ripple setting
 
+### Version 1.4.0
+- Download zipped project
+- Upload zipped project
+- Save file on file change setting
+- Save button save file or all open files in project setting
+- Switch to different Monaco Editor npm module that is offline compatible
+- Lots of bug fixes with editor and editor tabs
+
 ### Future Plans
 
 - Download project button

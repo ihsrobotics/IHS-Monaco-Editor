@@ -69,7 +69,6 @@ function UserSettingsForm() {
           label="Save Button Behavior (File Only | Project)"
           checked={userSettings.saveButtonSaveProject}
           item="saveButtonSaveProject"
-          disabled
         />
         <UserSettingSwitch
           label="Save File on Editor Close"
@@ -80,7 +79,6 @@ function UserSettingsForm() {
           label="Save File on File Change"
           checked={userSettings.saveFileOnFileChange}
           item="saveFileOnFileChange"
-          disabled
         />
         <UserSettingSwitch
           label="Show Project Config Folder (.editor)"

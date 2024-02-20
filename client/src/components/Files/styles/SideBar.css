@@ -21,10 +21,9 @@
   flex: 1;
   flex-wrap: nowrap;
   /* border-right: 2px solid blue; */
-  overflow: hidden;
+  overflow-x: hidden;
   text-overflow: ellipsis;
   min-width: 0;
-
 }
 
 .app-sidebar .app-sidebar-resizer {

@@ -22,15 +22,30 @@ import { ModalContext, ModalFunction } from "../Modal/context/ModalContext";
 import useToastContext from "../Toast/hooks/useToastContext";
 import useEditorTabsContext from "../EditorTabs/hooks/useEditorTabsContext";
 import { ADDRESS, PORT } from "../../env/address";
+import { styled } from "@mui/material/styles";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
 
 interface Props {
   isFinished: boolean;
   PID: number | undefined;
 }
 
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
 function ToolBar({ isFinished, PID }: Props) {
   const {
-    editorTabs: { array: tabs },
+    editorTabs: { array: tabs, update: updateTabs },
     selectedTabValue,
   } = useEditorTabsContext();
 
@@ -39,23 +54,52 @@ function ToolBar({ isFinished, PID }: Props) {
   const { loadFiles } = useContext(LoadFilesContext);
   const { useModal, setOpen } = useContext(ModalContext);
 
+  const { userSettings } = useUserSettingsContext();
+
   const handleClickReloadFiles = () => {
     loadFiles();
   };
 
-  const handleClickSave = async () => {
-    await saveFile(
-      selectedTabValue,
-      tabs[tabIndex].editorContent,
-      undefined,
-      toast
-    );
-    tabs[tabIndex].editorSaved = true;
+  const handleClickSave = () => {
+    if (!userSettings.saveButtonSaveProject) {
+      saveFile(selectedTabValue, tabs[tabIndex].editorContent, toast, () => {
+        updateTabs(tabIndex, { ...tabs[tabIndex], editorSaved: true });
+      });
+    } else {
+      const projectName = selectedTabValue.split("/")[1];
+      if (!projectName) return;
+      tabs.forEach((tab, index) => {
+        if (tab.value.split("/")[1] === projectName && !tab.editorSaved) {
+          saveFile(tab.value, tab.editorContent, toast, () => {
+            updateTabs(index, { ...tabs[index], editorSaved: true });
+          });
+        }
+      });
+    }
   };
 
   const handleClickCompile = async () => {
-    await saveFile(selectedTabValue, tabs[tabIndex].editorContent, undefined);
-    tabs[tabIndex].editorSaved = true;
+    if (!userSettings.saveButtonSaveProject) {
+      await saveFile(
+        selectedTabValue,
+        tabs[tabIndex].editorContent,
+        undefined,
+        () => {
+          updateTabs(tabIndex, { ...tabs[tabIndex], editorSaved: true });
+        }
+      );
+    } else {
+      const projectName = selectedTabValue.split("/")[1];
+      if (!projectName) return;
+      tabs.forEach(async (tab, index) => {
+        if (tab.value.split("/")[1] === projectName && !tab.editorSaved) {
+          await saveFile(tab.value, tab.editorContent, undefined, () => {
+            updateTabs(index, { ...tabs[index], editorSaved: true });
+          });
+        }
+      });
+    }
+
     compileProject(selectedTabValue, toast);
   };
 
@@ -97,7 +141,7 @@ function ToolBar({ isFinished, PID }: Props) {
     })
       .then((response) => {
         if (!response.ok) {
-          toast.error('Error downloading project' + response.status)
+          toast.error("Error downloading project" + response.status);
         }
         return response.blob();
       })
@@ -114,6 +158,29 @@ function ToolBar({ isFinished, PID }: Props) {
       .catch((error) => toast.error(error));
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(`http://${ADDRESS}:${PORT}/api/uploadProject`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          toast.success("project uploaded successfully");
+          loadFiles();
+        } else {
+          toast.error("status " + response.status + " " + response.json());
+        }
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
   return (
     <div className="toolBar">
       <Stack spacing={2} direction={"row"}>
@@ -128,12 +195,24 @@ function ToolBar({ isFinished, PID }: Props) {
           New Project
         </Button>
         <ToolBarButton
+          name="upload project"
+          handleClick={() => {}}
+          icon={<DriveFolderUploadIcon />}
+          component="label"
+        >
+          <VisuallyHiddenInput
+            type="file"
+            accept=".zip"
+            onChange={handleFileUpload}
+          />
+        </ToolBarButton>
+
+        <ToolBarButton
           name="reload files"
           handleClick={handleClickReloadFiles}
           icon={<ReplayIcon />}
         />
       </Stack>
-
       <Stack spacing={6} direction={"row"}>
         <Stack spacing={2} direction={"row"}>
           <ToolBarButton
@@ -143,7 +222,11 @@ function ToolBar({ isFinished, PID }: Props) {
             icon={<DownloadIcon />}
           />
           <ToolBarButton
-            name="save file"
+            name={
+              userSettings.saveButtonSaveProject
+                ? "save all open project files"
+                : "save file"
+            }
             color={
               !tabs[tabIndex]
                 ? "primary"
@@ -156,9 +239,13 @@ function ToolBar({ isFinished, PID }: Props) {
             icon={<SaveIcon />}
           />
           <ToolBarButton
-            name="save file + compile project"
+            name={
+              (userSettings.saveButtonSaveProject
+                ? "save all open project files"
+                : "save file") + " + compile project"
+            }
             handleClick={handleClickCompile}
-            disabled={!tabs[tabIndex] || !isFinished}
+            disabled={!tabs[tabIndex]}
             icon={<TextSnippetIcon />}
           />
           <ToolBarButton

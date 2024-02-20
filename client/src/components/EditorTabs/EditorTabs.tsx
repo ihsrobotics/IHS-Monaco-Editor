@@ -1,16 +1,6 @@
-import { ReactNode } from "react";
 import DraggableTabsList from "./DraggableTabsList";
 import { DropResult } from "@hello-pangea/dnd";
 import useEditorTabsContext from "./hooks/useEditorTabsContext";
-
-export type tab = {
-  id: string;
-  label: string;
-  value: string;
-  content: ReactNode;
-  editorContent: string;
-  editorSaved: boolean;
-};
 
 function EditorTabs() {
   const {

@@ -6,8 +6,9 @@ const { exec, spawn } = require("child_process");
 const cors = require("cors");
 const os = require("os");
 const archiver = require("archiver");
-const {pythonBoilerplate, cppBoilerplate} = require("./server-config.json")
-
+const multer = require("multer");
+const unzipper = require("unzipper");
+const { pythonBoilerplate, cppBoilerplate } = require("./server-config.json");
 
 const app = express();
 const PORT = 5000;
@@ -17,23 +18,13 @@ app.use(cors());
 // directory path of all editor files
 const DIRECTORY_PATH = path.join(process.env.HOME, "Documents", "IME_files");
 
+const upload = multer({ dest: DIRECTORY_PATH });
+
 if (!fsSync.existsSync(DIRECTORY_PATH)) {
   fsSync.mkdirSync(DIRECTORY_PATH, { recursive: true });
 }
 
 process.env.PYTHONUNBUFFERED = "1";
-
-// let PY_BOILERPLATE = "";
-// let CPP_BOILERPLATE = "";
-
-// async function loadBp() {
-//   const boilerplate = JSON.parse(
-//     await fs.readFile("./server-config.json", "utf-8")
-//   );
-//   PY_BOILERPLATE = boilerplate.pythonBoilerplate;
-//   CPP_BOILERPLATE = boilerplate.cppBoilerplate;
-// }
-// loadBp();
 
 async function formatFileHierarchy(directoryPath) {
   const fileHierarchy = {};
@@ -115,7 +106,7 @@ app.post("/api/shell", (req, res) => {
 
 app.post("/api/saveFile", async (req, res) => {
   const { fileName, content } = req.body;
-  if (!fileName || !content) {
+  if (!fileName || content === undefined) {
     return res
       .status(400)
       .json({ error: "Filename and content parameter are required" });
@@ -136,7 +127,7 @@ app.post("/api/writeBp", async (req, res) => {
       .status(400)
       .json({ error: "Filename and content parameter are required" });
   }
-  try{
+  try {
     if (boilerplate === "py-bp") {
       await fs.writeFile(
         path.join(DIRECTORY_PATH, filePath, "src", "main.py"),
@@ -182,11 +173,9 @@ app.post("/api/writeBp", async (req, res) => {
       );
       res.status(200).send("success");
     }
-  }
-  catch(error){
+  } catch (error) {
     res.status(500).send(error);
   }
-    
 });
 
 app.get("/api/getPath", async (req, res) => {
@@ -284,6 +273,40 @@ app.post("/api/downloadProject", (req, res) => {
   archive.directory(folderPath, false);
   archive.finalize();
   res.attachment(`${projectName}.zip`);
+});
+
+function extractZip(zipFilePath, extractPath) {
+  return new Promise((resolve, reject) => {
+    fsSync
+      .createReadStream(zipFilePath)
+      .pipe(unzipper.Parse())
+      .on("entry", (entry) => {
+        const filePath = path.join(extractPath, entry.path);
+        if (entry.type === "File") {
+          entry.pipe(fsSync.createWriteStream(filePath));
+        } else if (entry.type === "Directory") {
+          fsSync.mkdirSync(filePath, { recursive: true });
+        }
+      })
+      .on("error", (error) => {
+        reject(error);
+      })
+      .on("close", () => {
+        resolve();
+      });
+  });
+}
+
+app.post("/api/uploadProject", upload.single("file"), async (req, res) => {
+  const zipFilePath = req.file.path;
+  const projectName = req.file.originalname.slice(0, -4);
+  try {
+    await extractZip(zipFilePath, path.join(DIRECTORY_PATH, projectName));
+    fsSync.unlinkSync(zipFilePath);
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(500).send("Error unzipping file.");
+  }
 });
 
 app.listen(PORT, () => {
