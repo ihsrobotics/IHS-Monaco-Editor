@@ -309,6 +309,11 @@ app.post("/api/uploadProject", upload.single("file"), async (req, res) => {
   }
 });
 
+app.post("/api/session", (req, res) => {
+  const {id} = req.body;
+  res.send({id: id});
+});
+
 app.listen(PORT, () => {
   console.log("Server started on port", PORT);
 });

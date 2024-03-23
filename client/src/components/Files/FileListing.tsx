@@ -1,10 +1,12 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import Directory from "./Directory";
 import "./styles/FileListing.css";
-
 import FileComponent from "./File";
 import { LoadFilesContext } from "./context/FilesContext";
 import useUserSettingsContext from "../ModalContent/UserSettingsForm/hooks/useUserSettingsContext";
+import useToastContext from "../Toast/hooks/useToastContext";
+import { v4 as uuidv4 } from "uuid";
+import { ADDRESS, PORT } from "../../env/address";
 
 type MultiDimensionalArray = (string | number)[] | MultiDimensionalArray[];
 type DirectoryObject = {
@@ -60,6 +62,45 @@ function FileListing() {
     },
     [userSettings]
   );
+
+  const { toast } = useToastContext();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const uuid = uuidv4();
+      console.log("session");
+      fetch(`http://${ADDRESS}:${PORT}/api/session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: uuid }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            toast.error("disconnected from server.");
+            throw new Error("disconnected from server.");
+          }
+        })
+        .then((data) => {
+          if (data.id !== uuid) {
+            toast.error("internal server error.");
+            throw new Error("internal server error.")
+          } else {
+            console.log("session ok");
+          }
+        })
+        .catch(() => {
+          toast.error("disconnected from server.");
+          throw new Error("disconnected from server.");
+        });
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     loadFiles();
